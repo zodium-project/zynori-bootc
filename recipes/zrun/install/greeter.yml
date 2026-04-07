@@ -6,7 +6,7 @@ modules:
     install:
       install-weak-deps: false
       packages:
-          - plamsa-login-manager
+          - plasma-login-manager
 
   - type: script
     snippets:
