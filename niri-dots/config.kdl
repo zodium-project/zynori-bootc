@@ -1,0 +1,47 @@
+// =========================
+// EXTERNAL CONFIG INCLUDE
+// =========================
+
+include "./autostart.kdl"
+include "./windowrule.kdl"
+include "./keybinds.kdl"
+include "./visual.kdl"
+
+// =========================
+// WORKSPACES CONFIGURATION
+// =========================
+
+// Workspaces "a" to "i" always open on external HDMI monitor
+//workspace "a" {
+    //open-on-output "HDMI-A-1" // assign workspace to HDMI monitor
+//}
+
+
+// =========================
+// OUTPUT / MONITOR SETTINGS
+// =========================
+
+/-output "eDP-1" {
+    mode "1920x1080@144" // resolution and refresh rate for laptop screen
+    hot-corners {
+        off // disable hot corners (prevents accidental triggers)
+    }
+}
+
+// =========================
+// SCREENSHOT SETTINGS
+// =========================
+
+screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png" 
+// defines screenshot save location and filename format
+
+// =========================
+// DEBUG SETTINGS
+// =========================
+
+debug {
+    honor-xdg-activation-with-invalid-serial 
+    // allows external apps (like Noctalia) to activate windows
+}
+
+

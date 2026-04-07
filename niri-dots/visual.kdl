@@ -1,0 +1,87 @@
+// =========================
+// VISUAL SETTINGS
+// =========================
+
+prefer-no-csd // prefer server-side decorations (disable client-side ones)
+
+cursor {
+    //xcursor-theme "Future-dark-cursors" // cursor theme
+    xcursor-size 24 // cursor size
+    hide-when-typing // hide cursor while typing
+}
+
+layout {
+    gaps 10 // spacing between windows
+
+    focus-ring {
+        off // disable focus highlight ring
+    }
+
+    border {
+        width 3 // window border thickness
+    }
+
+    shadow {} // must be initialized to allow external config overrides
+}
+
+// =========================
+// UI / OVERLAY SETTINGS
+// =========================
+
+hotkey-overlay {
+    skip-at-startup // do not show hotkey help on startup
+}
+
+
+// =========================
+// ANIMATIONS CONFIG
+// =========================
+
+animations {
+
+    workspace-switch {
+        //off // disable workspace switching animations
+    }
+
+    window-open {
+        duration-ms 5 // ultra-fast open animation
+        curve "linear" // no easing
+    }
+
+    window-close {
+        duration-ms 5
+        curve "linear"
+    }
+
+    horizontal-view-movement {
+        spring damping-ratio=1.0 stiffness=1500 epsilon=0.0001 // stiff, snappy movement
+    }
+
+    window-movement {
+        spring damping-ratio=1.0 stiffness=1500 epsilon=0.0001
+    }
+
+    window-resize {
+        //off // disable resize animation
+    }
+
+    config-notification-open-close {
+        //off // disable config notification animations
+    }
+
+    exit-confirmation-open-close {
+        //off // disable exit dialog animation
+    }
+
+    screenshot-ui-open {
+        //off // disable screenshot UI animation
+    }
+
+    overview-open-close {
+        //off // disable overview animation
+    }
+
+    recent-windows-close {
+        //off // disable recent windows animation
+    }
+}
