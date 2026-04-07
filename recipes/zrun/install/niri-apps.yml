@@ -1,0 +1,21 @@
+---
+# yaml-language-server: $schema=https://schema.blue-build.org/module-list-v1.json
+
+modules:
+  - type: dnf
+    repos:
+      copr:
+        - scottames/ghostty
+    install:
+      install-weak-deps: false
+      packages:
+          - nautilus
+          - file-roller
+          - ghostty
+          - gnome-disk-utility
+          - input-remapper
+
+  - type: script
+    snippets:
+        - "dnf -y copr disable scottames/ghostty"
+        - "rm -rf /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:scottames:ghostty.repo"

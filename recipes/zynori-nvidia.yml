@@ -1,0 +1,44 @@
+---
+# yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
+# image will be published to ghcr.io/<user>/<name>
+
+####################
+#### Image Info ####
+####################
+name: zynori-nvidia
+description: Zynori Linux image for NVIDIA GPUS.
+base-image: ghcr.io/zodium-project/zcore-nvidia
+image-version: latest
+platforms:
+  - linux/amd64
+#################
+#### MODULES ####
+#################
+modules:
+## Import Modules/Scripts ##
+  - from-file: zrun/configure/pre-setup.yml
+
+  - from-file: zrun/install/xdg-base.yml
+  - from-file: zrun/install/greeter.yml
+  - from-file: zrun/install/noctalia-shell.yml
+  - from-file: zrun/install/niri-apps.yml
+  - from-file: zrun/install/niri-input.yml
+
+  - from-file: zrun/configure/zynori-settings.yml
+  - from-file: zrun/configure/post-setup.yml
+#############################
+### End of System Modules ###
+#############################
+## OS-release Module ##
+  - type: os-release
+    properties:
+      NAME: Zynori Linux
+      PRETTY_NAME: Zynori Linux (NVIDIA) by zodium project
+      DEFAULT_HOSTNAME: zynori
+## initramfs module ##
+  - type: initramfs
+## Signing Module ##
+  - type: signing
+###################
+### END of File ###
+###################

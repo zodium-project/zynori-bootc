@@ -1,0 +1,28 @@
+---
+# yaml-language-server: $schema=https://schema.blue-build.org/module-list-v1.json
+
+modules:
+  - type: dnf
+    repos:
+      copr:
+        - yalter/niri
+        - lionheartp/Hyprland
+    install:
+      install-weak-deps: false
+      packages:
+          - niri
+          - noctalia-qs
+          - noctalia-shell
+          - cliphist
+          - wlsunset
+          - brightnessctl
+          - wl-clipboard
+          - evolution-data-server
+          - power-profiles-daemon
+
+  - type: script
+    snippets:
+        - "dnf -y copr disable lionheartp/Hyprland"
+        - "rm -rf /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:lionheartp:Hyprland.repo"
+        - "dnf -y copr disable yalter/niri"
+        - "rm -rf /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:yalter:niri.repo"
