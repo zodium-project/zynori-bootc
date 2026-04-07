@@ -6,8 +6,8 @@ modules:
     install:
       install-weak-deps: false
       packages:
-          - ly
+          - plamsa-login-manager
 
   - type: script
     snippets:
-          - "systemctl enable ly"
+          - "systemctl enable plasmalogin.service"
