@@ -10,4 +10,4 @@ modules:
 
   - type: script
     snippets:
-          - "systemctl enable ly.service"
+          - "systemctl enable ly"
