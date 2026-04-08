@@ -13,6 +13,7 @@ modules:
           - qt5ct
           - nwg-look
           - cliphist
+          - fastfetch
           - noctalia-qs
           - noctalia-shell
           - evolution-data-server
