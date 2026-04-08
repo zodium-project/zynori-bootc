@@ -8,6 +8,9 @@ modules:
       packages:
        - sddm
        - sddm-wayland-generic
+       - qt6-qtvirtualkeyboard
+       - qt6-qtmultimedia
+       - qt6-qtsvg
 
   - type: script
     snippets:
