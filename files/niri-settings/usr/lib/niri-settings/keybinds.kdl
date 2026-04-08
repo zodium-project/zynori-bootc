@@ -110,9 +110,9 @@ binds {
     Mod+Shift+0 { move-column-to-workspace 10;}
 
     // --- Window states ---
-    Mod+W       { maximize-column;        }
-    Mod+Shift+W { fullscreen-window;      }
-    Mod+F       { toggle-window-floating; }
+    Mod+F       { maximize-column;        }
+    Mod+Shift+F { fullscreen-window;      }
+    Mod+T       { toggle-window-floating; }
 
     // --- Screenshots ---
     Print       { screenshot;        }
