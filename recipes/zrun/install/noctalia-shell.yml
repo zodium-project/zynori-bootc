@@ -9,6 +9,9 @@ modules:
     install:
       install-weak-deps: false
       packages:
+          - qt6ct
+          - qt5ct
+          - nwg-look
           - cliphist
           - noctalia-qs
           - noctalia-shell

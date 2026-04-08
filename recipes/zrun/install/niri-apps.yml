@@ -18,6 +18,7 @@ modules:
           - ghostty
           - firefox
           - gnome-disk-utility
+          - system-config-printer
           - input-remapper
 
   - type: script
