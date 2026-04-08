@@ -1,4 +1,5 @@
 spawn-sh-at-startup "qs -c noctalia-shell"
+spawn-sh-at-startup "/usr/libexec/polkit-kde-authentication-agent-1"
 
 environment {
     QT_QPA_PLATFORM      "wayland"
