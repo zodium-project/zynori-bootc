@@ -2,24 +2,24 @@
 // VISUAL SETTINGS
 // =========================
 
-prefer-no-csd // prefer server-side decorations (disable client-side ones)
+prefer-no-csd
 
 cursor {
-    //xcursor-theme "Future-dark-cursors" // cursor theme
-    xcursor-size 24 // cursor size
-    hide-when-typing // hide cursor while typing
+    //xcursor-theme "Future-dark-cursors"
+    xcursor-size 24
+    hide-when-typing
 }
 
 layout {
-    gaps 8 // spacing between windows
+    gaps 8
 
     focus-ring {
-        off // disable focus highlight ring
+        off
     }
 
     border {
-        on      // enable border
-        width 2 // window border thickness
+        on
+        width 2
         active-gradient from="#708e9e" to="#5f967c" angle=45 relative-to="workspace-view"
         inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view" in="srgb-linear"
         urgent-gradient from="#885f96" to="#9c3b3b" angle=45
@@ -46,7 +46,7 @@ layout {
 // =========================
 
 hotkey-overlay {
-    skip-at-startup // do not show hotkey help on startup
+    skip-at-startup
 }
 
 

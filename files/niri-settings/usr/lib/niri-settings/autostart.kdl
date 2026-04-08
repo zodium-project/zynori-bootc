@@ -1,4 +1,4 @@
-spawn-sh-at-startup "qs -c noctalia-shell" // start Noctalia shell on startup
+spawn-sh-at-startup "qs -c noctalia-shell"
 
 environment {
     QT_QPA_PLATFORM      "wayland"

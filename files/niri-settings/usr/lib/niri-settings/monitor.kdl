@@ -1,25 +1,4 @@
 // =========================
-// WORKSPACES CONFIGURATION
-// =========================
-
-// Workspaces "a" to "i" always open on external HDMI monitor
-//workspace "a" {
-    //open-on-output "HDMI-A-1" // assign workspace to HDMI monitor
-//}
-
-
-// =========================
-// OUTPUT / MONITOR SETTINGS
-// =========================
-
-/-output "eDP-1" {
-    mode "1920x1080@144" // resolution and refresh rate for laptop screen
-    hot-corners {
-        off // disable hot corners (prevents accidental triggers)
-    }
-}
-
-// =========================
 // SCREENSHOT SETTINGS
 // =========================
 
