@@ -20,3 +20,6 @@ modules:
     snippets:
         - "dnf -y copr disable scottames/ghostty"
         - "rm -rf /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:scottames:ghostty.repo"
+        - "rm -rf /usr/lib64/firefox/browser/defaults/preferences/firefox-redhat-default-prefs.js"
+        - "rm -rf /usr/lib/firefox/browser/defaults/preferences/firefox-redhat-default-prefs.js"
+        - "rm -rf /usr/lib64/firefox/distribution/"
