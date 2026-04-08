@@ -41,7 +41,7 @@ binds {
     Mod+RETURN  { spawn "ghostty"; } // terminal (alt)
     Mod+E       { spawn "nautilus"; } // file manager
     Mod+B       { spawn "firefox"; } // browser
-    Mod+SHIFT+B { spawn "firefox --private-window"; } // private browser
+    Mod+SHIFT+B { spawn "firefox" "--private-window"; } // private browser
     Mod+N       { spawn "code"; } // VS Code
 
     // --- Noctalia-Shell ---
