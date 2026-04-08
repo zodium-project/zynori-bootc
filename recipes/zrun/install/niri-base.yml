@@ -10,7 +10,6 @@ modules:
       install-weak-deps: false
       packages:
           - niri
-          - cliphist
           - wlsunset
           - brightnessctl
           - wl-clipboard

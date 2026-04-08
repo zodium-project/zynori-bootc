@@ -9,6 +9,7 @@ modules:
     install:
       install-weak-deps: false
       packages:
+          - cliphist
           - noctalia-qs
           - noctalia-shell
           - evolution-data-server
