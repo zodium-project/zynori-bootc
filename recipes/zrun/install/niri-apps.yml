@@ -17,6 +17,7 @@ modules:
           - file-roller
           - ghostty
           - firefox
+          - gnome-characters
           - gnome-disk-utility
           - system-config-printer
           - input-remapper
