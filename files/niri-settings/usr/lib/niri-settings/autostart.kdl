@@ -1,0 +1,7 @@
+spawn-sh-at-startup "qs -c noctalia-shell" // start Noctalia shell on startup
+
+environment {
+    QT_QPA_PLATFORM      "wayland"
+    QT_QPA_PLATFORMTHEME "gtk3"
+    QS_ICON_THEME        "Papirus-Dark"
+}

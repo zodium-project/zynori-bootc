@@ -12,6 +12,7 @@ modules:
           - nautilus
           - file-roller
           - ghostty
+          - firefox
           - gnome-disk-utility
           - input-remapper
 

@@ -1,0 +1,6 @@
+// =========================
+// Import Zynori Dots
+// =========================
+
+// comment or remove this line to use your own dots
+include "/usr/lib/niri-settings/zynori.kdl"

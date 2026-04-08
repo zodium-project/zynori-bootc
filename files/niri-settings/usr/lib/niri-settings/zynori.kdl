@@ -1,0 +1,9 @@
+// =========================
+// EXTERNAL CONFIG INCLUDE
+// =========================
+
+include "./autostart.kdl"
+include "./windowrule.kdl"
+include "./keybinds.kdl"
+include "./visual.kdl"
+include "./monitor.kdl"

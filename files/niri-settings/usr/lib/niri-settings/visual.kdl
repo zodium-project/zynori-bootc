@@ -11,17 +11,34 @@ cursor {
 }
 
 layout {
-    gaps 10 // spacing between windows
+    gaps 8 // spacing between windows
 
     focus-ring {
         off // disable focus highlight ring
     }
 
     border {
-        width 3 // window border thickness
+        on      // enable border
+        width 2 // window border thickness
+        active-gradient from="#708e9e" to="#5f967c" angle=45 relative-to="workspace-view"
+        inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view" in="srgb-linear"
+        urgent-gradient from="#885f96" to="#9c3b3b" angle=45
     }
 
-    shadow {} // must be initialized to allow external config overrides
+    shadow {
+        on
+        softness 9
+        spread 3
+        offset x=0 y=0
+        draw-behind-window false
+        color "#00000070"
+    }
+    preset-column-widths {
+        proportion 0.33333
+        proportion 0.5
+        proportion 0.66666
+        proportion 0.99999
+    }
 }
 
 // =========================
@@ -44,13 +61,13 @@ animations {
     }
 
     window-open {
-        duration-ms 5 // ultra-fast open animation
-        curve "linear" // no easing
+        duration-ms 185 // ultra-fast open animation
+        curve "ease-out-quad"
     }
 
     window-close {
-        duration-ms 5
-        curve "linear"
+        duration-ms 185
+        curve "ease-out-quad"
     }
 
     horizontal-view-movement {
