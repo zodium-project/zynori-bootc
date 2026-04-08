@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Update System
 Comment=Run Zync system update
-Exec=zync
+Exec=/usr/bin/ghostty --class=zync.updater.ghostty.window -e zync
 Icon=system-software-update
 Terminal=true
 Type=Application
