@@ -30,7 +30,7 @@ tab-inherit-working-directory = true
 
 # ── misc ─────────────────────────────────
 scrollbar = system
-scrollback-limit = 10000
+scrollback-limit = 50000
 mouse-hide-while-typing = true
 shell-integration-features = no-cursor
 clipboard-read = allow
