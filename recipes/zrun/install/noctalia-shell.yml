@@ -13,6 +13,7 @@ modules:
           - noctalia-qs
           - noctalia-shell
           - evolution-data-server
+          - breeze-cursor-theme
           - papirus-icon-theme
           - papirus-icon-theme-dark
 
