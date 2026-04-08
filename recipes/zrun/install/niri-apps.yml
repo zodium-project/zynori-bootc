@@ -10,6 +10,10 @@ modules:
       install-weak-deps: false
       packages:
           - nautilus
+          - nautilus-python
+          - glycin-thumbnailer
+          - glycin-gtk4-libs
+          - ffmpegthumbnailer
           - file-roller
           - ghostty
           - firefox
