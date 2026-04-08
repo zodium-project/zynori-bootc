@@ -19,7 +19,6 @@ modules:
   - from-file: zrun/configure/pre-setup.yml
 
   - from-file: zrun/install/xdg-base.yml
-  - from-file: zrun/install/greeter.yml
   - from-file: zrun/install/noctalia-shell.yml
   - from-file: zrun/install/niri-apps.yml
   - from-file: zrun/install/niri-input.yml
