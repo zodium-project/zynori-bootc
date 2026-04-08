@@ -1,5 +1,5 @@
 # ── window ───────────────────────────────
-title = Ghostty Terminal
+title =
 window-decoration = client
 window-padding-x = 15
 window-padding-y = 10
@@ -18,7 +18,7 @@ custom-shader = shader/animated_cursor.glsl
 theme = light:zayu_light,dark:zayu_dark
 palette-generate = true
 window-theme = ghostty
-gtk-toolbar-style = raised-border
+gtk-toolbar-style = flat
 gtk-titlebar-style = native
 gtk-tabs-location = bottom
 gtk-wide-tabs = true
