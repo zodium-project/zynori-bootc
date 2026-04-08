@@ -4,3 +4,9 @@ window-rule {
     tiled-state true // enforce tiling by default
     draw-border-with-background false // don't blend border into background
 }
+
+layer-rule {
+  // set overview wallpaper.
+  match namespace="^noctalia-overview*"
+  place-within-backdrop true
+}
