@@ -9,6 +9,7 @@ modules:
        - sddm
        - sddm-wayland-generic
        - qt6-qtvirtualkeyboard
+       - kwin_wayland
        - qt6-qtmultimedia
        - qt6-qtsvg
        - qt6-qtquickcontrols2
