@@ -18,7 +18,6 @@ modules:
           - ghostty
           - firefox
           - gnome-characters
-          - polkit-kde
           - gnome-disk-utility
           - system-config-printer
           - input-remapper
