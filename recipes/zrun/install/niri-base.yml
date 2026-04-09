@@ -16,6 +16,7 @@ modules:
           - power-profiles-daemon
           - adw-gtk3-theme
           - gnome-keyring
+          - gnome-keyring-pam
 
   - type: script
     snippets:
