@@ -17,3 +17,6 @@ modules:
   - type: script
     snippets:
         - "systemctl enable sddm.service"
+        - "mkdir -p /etc/sddm/themes/zydm"
+        - "git clone --depth 1 https://github.com/zodium-project/zydm-theme.git /etc/sddm/themes/zydm/"
+        - "rm -rf /etc/sddm/themes/zydm/.git/ /etc/sddm/themes/zydm/LICENSE /etc/sddm/themes/zydm/THIRD_PARTY_LICENSE"
