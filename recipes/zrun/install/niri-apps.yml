@@ -14,6 +14,7 @@ modules:
           - glycin-thumbnailer
           - glycin-gtk4-libs
           - ffmpegthumbnailer
+          - seahorse
           - file-roller
           - ghostty
           - firefox
