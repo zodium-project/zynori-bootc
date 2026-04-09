@@ -10,6 +10,7 @@ modules:
       install-weak-deps: false
       packages:
           - cliphist
+          - wtype
           - fastfetch
           - noctalia-qs
           - noctalia-shell
