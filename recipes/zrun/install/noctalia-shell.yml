@@ -14,6 +14,7 @@ modules:
           - fastfetch
           - noctalia-qs
           - noctalia-shell
+          - nwg-look
           - evolution-data-server
           - breeze-cursor-theme
           - papirus-icon-theme
