@@ -1,8 +1,12 @@
 spawn-sh-at-startup "qs -c noctalia-shell"
 
 environment {
+    GSK_RENDERER         "ngl"
+    GTK_USE_PORTAL       "1"
+    GDK_BACKEND          "wayland,x11"
+    MOZ_WEBRENDER        "1"
+    MOZ_ENABLE_WAYLAND   "1"
+    QS_ICON_THEME        "Papirus-Dark"
     QT_QPA_PLATFORM      "wayland"
     QT_QPA_PLATFORMTHEME "gtk3"
-    QS_ICON_THEME        "Papirus-Dark"
-    GSK_RENDERER "cairo"
 }
