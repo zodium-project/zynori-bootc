@@ -1,5 +1,7 @@
+// Start Noctalia Shell on startup
 spawn-sh-at-startup "qs -c noctalia-shell"
 
+// Environment Variables
 environment {
     GTK_USE_PORTAL       "1"
     GSK_RENDERER         "gl"
