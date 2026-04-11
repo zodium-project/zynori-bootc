@@ -15,6 +15,9 @@ modules:
           - glycin-thumbnailer
           - glycin-gtk4-libs
           - ffmpegthumbnailer
+          - kdeconnectd
+          - kde-connect
+          - kde-connect-nautilus
           - seahorse
           - bazaar
           - file-roller
