@@ -2,7 +2,7 @@
 // SCREENSHOT SETTINGS
 // =========================
 
-screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png" 
+screenshot-path "~/Pictures/Screenshots/Screenshot-%Y-%m-%d-%H-%M-%S.png" 
 // defines screenshot save location and filename format
 
 // =========================

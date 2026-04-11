@@ -22,7 +22,6 @@ binds {
 
     // --- Window management ---
     Mod+C           { center-column;                }
-    Mod+Ctrl+C      { center-visible-columns;       }
     Mod+G           { toggle-column-tabbed-display; }
     Mod+R           { switch-preset-column-width;   }
     Mod+Shift+R     { switch-preset-window-height;  }
@@ -36,8 +35,8 @@ binds {
 
     // --- Application launching ---
     Mod+N       { spawn "code";                      }
-    Mod+RETURN  { spawn "ghostty";                   }
-    Mod+E       { spawn "nautilus";                  }
+    Mod+RETURN  { spawn "GSK_RENDERER=vulkan ghostty";                   }
+    Mod+E       { spawn "GSK_RENDERER=gl nautilus --new-window --no-desktop";                  }
     Mod+B       { spawn "firefox";                   }
     Mod+SHIFT+B { spawn "firefox" "--private-window";}
 
@@ -111,7 +110,6 @@ binds {
 
     // --- Window states ---
     Mod+F       { maximize-column;        }
-    Mod+Shift+F { fullscreen-window;      }
     Mod+T       { toggle-window-floating; }
 
     // --- Screenshots ---
