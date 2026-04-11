@@ -6,6 +6,7 @@ modules:
     repos:
       copr:
         - scottames/ghostty
+        - ublue-os/packages
     install:
       install-weak-deps: false
       packages:
@@ -15,6 +16,7 @@ modules:
           - glycin-gtk4-libs
           - ffmpegthumbnailer
           - seahorse
+          - bazaar
           - file-roller
           - ghostty
           - firefox
@@ -26,6 +28,8 @@ modules:
   - type: script
     snippets:
         - "dnf -y copr disable scottames/ghostty"
+        - "rm -rf /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:ublue-os:packages.repo"
+        - "dnf -y copr disable ublue-os/packages"
         - "rm -rf /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:scottames:ghostty.repo"
         - "rm -rf /usr/lib64/firefox/browser/defaults/preferences/firefox-redhat-default-prefs.js"
         - "rm -rf /usr/lib/firefox/browser/defaults/preferences/firefox-redhat-default-prefs.js"
