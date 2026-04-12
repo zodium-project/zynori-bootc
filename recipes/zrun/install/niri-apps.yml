@@ -19,7 +19,7 @@ modules:
           - bazaar
           - file-roller
           - ghostty
-          - firefox
+          - helium-drm
           - gnome-characters
           - gnome-disk-utility
           - system-config-printer
