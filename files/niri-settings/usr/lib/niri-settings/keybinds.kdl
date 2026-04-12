@@ -38,7 +38,7 @@ binds {
     Mod+RETURN  { spawn-sh "GSK_RENDERER=vulkan ghostty";                                    }
     Mod+E       { spawn-sh "GSK_RENDERER=gl nautilus --new-window --no-desktop";             }
     Mod+B       { spawn-sh "MOZ_WEBRENDER=1 MOZ_ENABLE_WAYLAND=1 firefox";                   }
-    Mod+SHIFT+B { spawn-sh "MOZ_WEBRENDER=1 MOZ_ENABLE_WAYLAND=1 firefox" "--private-window";}
+    Mod+SHIFT+B { spawn-sh "MOZ_WEBRENDER=1 MOZ_ENABLE_WAYLAND=1 firefox --private-window";}
 
     // --- Noctalia-Shell ---
     Mod+A     { spawn-sh "qs -c noctalia-shell ipc call launcher toggle";     }
