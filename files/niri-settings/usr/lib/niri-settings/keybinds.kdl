@@ -37,8 +37,8 @@ binds {
     Mod+N       { spawn-sh "code --new-window --enable-features=UseOzonePlatform,WaylandWindowDecorations --ozone-platform=wayland --use-gl=desktop --enable-features=VaapiVideoDecoder --use-vulkan=disabled";}
     Mod+RETURN  { spawn-sh "GSK_RENDERER=vulkan ghostty";                                    }
     Mod+E       { spawn-sh "GSK_RENDERER=gl nautilus --new-window --no-desktop";             }
-    Mod+B       { spawn-sh "MOZ_WEBRENDER=1 MOZ_ENABLE_WAYLAND=1 firefox";                   }
-    Mod+SHIFT+B { spawn-sh "MOZ_WEBRENDER=1 MOZ_ENABLE_WAYLAND=1 firefox --private-window";}
+    Mod+B       { spawn-sh "helium";                   }
+    Mod+SHIFT+B { spawn-sh "helium --incognito";}
 
     // --- Noctalia-Shell ---
     Mod+A     { spawn-sh "qs -c noctalia-shell ipc call launcher toggle";     }
