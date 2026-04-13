@@ -26,7 +26,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           date -u +"%Y-%m-%d %H:%M:%S" > .keepalive
           git add .keepalive
-          git diff --staged --quiet || git commit -m "chore: keepalive $(date -u +%Y-%m-%d)"
+          git diff --staged --quiet || git commit -m "(Bot) KeepAlive $(date -u +%Y-%m-%d)"
           git push || true
 
   bluebuild:
