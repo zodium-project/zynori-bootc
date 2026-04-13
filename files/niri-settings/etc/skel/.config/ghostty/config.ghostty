@@ -1,6 +1,6 @@
 # ── window ───────────────────────────────
 title =
-window-decoration = client
+window-decoration = server
 window-padding-x = 15
 window-padding-y = 10
 window-padding-balance = true
