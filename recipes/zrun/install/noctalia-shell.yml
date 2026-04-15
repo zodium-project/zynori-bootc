@@ -22,5 +22,6 @@ modules:
 
   - type: script
     snippets:
-        - "dnf -y copr disable lionheartp/Hyprland"
-        - "rm -rf /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:lionheartp:Hyprland.repo"
+        - |
+          dnf -y copr disable lionheartp/Hyprland
+          rm -rf /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:lionheartp:Hyprland.repo

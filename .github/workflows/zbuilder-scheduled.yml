@@ -24,13 +24,19 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          TODAY=$(date -u +"%Y-%m-%d")
+          LAST=$(cat .keepalive 2>/dev/null | grep -oP '^\d{4}-\d{2}-\d{2}' || echo "")
+          if [ "$LAST" = "$TODAY" ]; then
+            echo "Keepalive already ran today ($TODAY), skipping."
+            exit 0
+          fi
           date -u +"%Y-%m-%d %H:%M:%S" > .keepalive
           git add .keepalive
-          git diff --staged --quiet || git commit -m "(Bot) KeepAlive $(date -u +%Y-%m-%d)"
+          git diff --staged --quiet || git commit -m "chore: keepalive $TODAY"
           git push || true
 
   bluebuild:
-    name: zbuild (scheduled)
+    name: Building-Image (${{ matrix.recipe }})
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -44,7 +50,7 @@ jobs:
           - zynori-nvidia.yml
 
     steps:
-      - name: Build Zodium Image
+      - name: BlueBuild-Image Builder
         uses: blue-build/github-action@v1.11
         with:
           recipe: ${{ matrix.recipe }}
