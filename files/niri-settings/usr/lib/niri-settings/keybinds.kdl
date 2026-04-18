@@ -34,20 +34,17 @@ binds {
 
 
     // --- Application launching ---
-    Mod+N       { spawn-sh "code --new-window --enable-features=UseOzonePlatform,WaylandWindowDecorations --ozone-platform=wayland --use-gl=desktop --enable-features=VaapiVideoDecoder --use-vulkan=disabled";}
-    Mod+RETURN  { spawn-sh "GSK_RENDERER=vulkan ghostty";                                    }
-    Mod+E       { spawn-sh "GSK_RENDERER=gl nautilus --new-window --no-desktop";             }
-    Mod+B       { spawn-sh "helium";                   }
-    Mod+SHIFT+B { spawn-sh "helium --incognito";}
+    Mod+N       { spawn-sh "code --new-window";                 }
+    Mod+RETURN  { spawn-sh "ghostty";                           }
+    Mod+E       { spawn-sh "nautilus --new-window --no-desktop";}
+    Mod+B       { spawn-sh "helium";                            }
+    Mod+SHIFT+B { spawn-sh "helium --incognito";                }
 
     // --- Noctalia-Shell ---
-    Mod+A     { spawn-sh "qs -c noctalia-shell ipc call launcher toggle";     }
     Mod+SPACE { spawn-sh "qs -c noctalia-shell ipc call launcher toggle";     }
     Mod+I     { spawn-sh "qs -c noctalia-shell ipc call settings toggle";     }
     Mod+L     { spawn-sh "qs -c noctalia-shell ipc call lockScreen lock";     }
-    Mod+P     { spawn-sh "qs -c noctalia-shell ipc call systemMonitor toggle";}
     Mod+V     { spawn-sh "qs -c noctalia-shell ipc call launcher clipboard";  }
-    Mod+D     { spawn-sh "qs -c noctalia-shell ipc call darkMode toggle";     }
 
     // --- Session controls ---
     Mod+Escape   { spawn-sh "qs -c noctalia-shell ipc call sessionMenu toggle";}
@@ -56,7 +53,7 @@ binds {
     // --- Audio controls (work even when locked) ---
     XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call volume increase";  }
     XF86AudioLowerVolume allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call volume decrease";  }
-    XF86AudioMute allow-when-locked=true        { spawn-sh "qs -c noctalia-shell ipc call volume muteOutput";}
+    XF86AudioMuteb       allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call volume muteOutput";}
 
     // --- Media & system controls ---
     XF86Search            { spawn-sh "qs -c noctalia-shell ipc call powerProfile cycle"; }

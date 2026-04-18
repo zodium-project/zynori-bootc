@@ -1,14 +1,2 @@
 // Start Noctalia Shell on startup
 spawn-sh-at-startup "qs -c noctalia-shell"
-
-// Environment Variables
-environment {
-    GTK_USE_PORTAL       "1"
-    GSK_RENDERER         "gl"
-    GDK_BACKEND          "wayland,x11"
-    MOZ_WEBRENDER        "1"
-    MOZ_ENABLE_WAYLAND   "1"
-    QS_ICON_THEME        "Papirus-Dark"
-    QT_QPA_PLATFORM      "wayland"
-    QT_QPA_PLATFORMTHEME "gtk3"
-}

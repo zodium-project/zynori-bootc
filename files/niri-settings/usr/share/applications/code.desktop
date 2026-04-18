@@ -1,8 +1,8 @@
 [Desktop Entry]
-Name=Visual Studio Code
+Name=VScode
 Comment=Code Editing. Redefined.
 GenericName=Text Editor
-Exec=/usr/share/code/code --enable-features=UseOzonePlatform,WaylandWindowDecorations --ozone-platform=wayland --use-gl=desktop --enable-features=VaapiVideoDecoder --use-vulkan=disabled %F
+Exec=/usr/share/code/code --enable-features=UseOzonePlatform,WaylandWindowDecorations --ozone-platform=wayland --enable-features=VaapiVideoDecoder %F
 Icon=vscode
 Type=Application
 StartupNotify=false
@@ -24,5 +24,5 @@ Name[ko]=새 빈 창
 Name[ru]=Новое пустое окно
 Name[zh_CN]=新建空窗口
 Name[zh_TW]=開新空視窗
-Exec=/usr/share/code/code --new-window --enable-features=UseOzonePlatform,WaylandWindowDecorations --ozone-platform=wayland --use-gl=desktop --enable-features=VaapiVideoDecoder --use-vulkan=disabled %F
+Exec=/usr/share/code/code --new-window --enable-features=UseOzonePlatform,WaylandWindowDecorations --ozone-platform=wayland --enable-features=VaapiVideoDecoder %F
 Icon=vscode
