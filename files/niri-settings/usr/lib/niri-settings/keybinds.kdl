@@ -53,7 +53,7 @@ binds {
     // --- Audio controls (work even when locked) ---
     XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call volume increase";  }
     XF86AudioLowerVolume allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call volume decrease";  }
-    XF86AudioMuteb       allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call volume muteOutput";}
+    XF86AudioMute        allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call volume muteOutput";}
 
     // --- Media & system controls ---
     XF86Search            { spawn-sh "qs -c noctalia-shell ipc call powerProfile cycle"; }
