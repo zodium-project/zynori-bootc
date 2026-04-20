@@ -10,14 +10,11 @@ modules:
        - sddm-wayland-generic
        - qt6-qtmultimedia
        - qt6-qtsvg
+       - zydm-theme
        - weston
        - qt6-qtquickcontrols2
        - qt6-qtdeclarative
 
   - type: script
     snippets:
-        - |
-          systemctl enable sddm.service
-          mkdir -p /etc/sddm/themes/zydm
-          git clone --depth 1 https://github.com/zodium-project/zydm-theme.git /etc/sddm/themes/zydm/
-          rm -rf /etc/sddm/themes/zydm/.git/ /etc/sddm/themes/zydm/LICENSE /etc/sddm/themes/zydm/THIRD_PARTY_LICENSE
+       - systemctl enable sddm.service
