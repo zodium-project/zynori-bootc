@@ -3,10 +3,6 @@
 
 modules:
   - type: dnf
-    repos:
-      copr:
-        - scottames/ghostty
-        - ublue-os/packages
     install:
       install-weak-deps: false
       packages:
@@ -23,11 +19,3 @@ modules:
           - gnome-disk-utility
           - system-config-printer
           - input-remapper
-
-  - type: script
-    snippets:
-        - |
-          dnf -y copr disable scottames/ghostty
-          dnf -y copr disable ublue-os/packages
-          rm -rf /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:scottames:ghostty.repo
-          rm -rf /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:ublue-os:packages.repo

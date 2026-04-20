@@ -3,9 +3,6 @@
 
 modules:
   - type: dnf
-    repos:
-      copr:
-        - lionheartp/Hyprland
     install:
       install-weak-deps: false
       packages:
@@ -19,9 +16,3 @@ modules:
           - breeze-cursor-theme
           - papirus-icon-theme
           - papirus-icon-theme-dark
-
-  - type: script
-    snippets:
-        - |
-          dnf -y copr disable lionheartp/Hyprland
-          rm -rf /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:lionheartp:Hyprland.repo
