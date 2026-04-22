@@ -16,3 +16,10 @@ modules:
           - breeze-cursor-theme
           - papirus-icon-theme
           - papirus-icon-theme-dark
+
+  - type: script
+    snippets:
+          - |
+            mkdir -p /etc/zodium /etc/zodium/Papirus /etc/zodium/Papirus-Dark
+            mv /usr/share/icons/Papirus/ /etc/zodium/Papirus/
+            mv /usr/share/icons/Papirus-Dark/ /etc/zodium/Papirus-Dark/
