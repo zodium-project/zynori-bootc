@@ -11,40 +11,64 @@ find_human_user() {
     getent passwd | awk -F: '$3 >= 1000 && $3 < 65534 {print $1; exit}'
 }
 
-REAL_USER=$(find_human_user)
-[ -n "$REAL_USER" ] || { echo "papirus-sync-systemd: no human user found"; exit 1; }
+apply_accent() {
+    local colors_json="$1"
 
-REAL_HOME=$(getent passwd "$REAL_USER" | cut -d: -f6)
-COLORS_JSON="$REAL_HOME/.config/noctalia/colors.json"
-THEME="Papirus-Dark"
-PAPIRUS_FOLDERS="/usr/bin/papirus-folders"
-
-echo "papirus-sync-systemd: syncing for '$REAL_USER'"
-
-# Read user config as root (we have permission), compute colors
-accent_hex=$(sudo -u "$REAL_USER" python3 -c "
+    accent_hex=$(python3 -c "
 import json
-with open('$COLORS_JSON') as f:
+with open('$colors_json') as f:
     d = json.load(f)
 print(d['mPrimary'].lstrip('#'))
 ")
 
-best=$(ACCENT_HEX="$accent_hex" python3 <<'EOF'
-import os
+    # Pure bash hex darkening — no python needed
+    darken() {
+        local hex="$1" factor="$2"
+        local r g b
+        r=$(( 16#${hex:0:2} ))
+        g=$(( 16#${hex:2:2} ))
+        b=$(( 16#${hex:4:2} ))
+        r=$(( r * (100 - factor) / 100 ))
+        g=$(( g * (100 - factor) / 100 ))
+        b=$(( b * (100 - factor) / 100 ))
+        printf "#%02x%02x%02x" $r $g $b
+    }
 
-def darken(hex_str, factor):
-    r, g, b = (int(hex_str[i:i+2], 16) for i in (0, 2, 4))
-    return f"#{max(0,int(r*(1-factor))):02x}{max(0,int(g*(1-factor))):02x}{max(0,int(b*(1-factor))):02x}"
+    local accent="#${accent_hex}"
+    local accent_dark shadow
+    accent_dark=$(darken "$accent_hex" 20)
+    shadow=$(darken "$accent_hex" 60)
 
-h = os.environ["ACCENT_HEX"]
-print(f"noctalia-dynamic\n{darken(h,0.60)}\n{darken(h,0.20)}\n#{h}")
-EOF
-)
+    echo "papirus-sync-systemd: applying accent=$accent shadow=$shadow accent_dark=$accent_dark"
 
-{ read -r color_name; read -r shadow; read -r accent_dark; read -r accent; } <<< "$best"
+    /usr/bin/papirus-folders -t "Papirus-Dark" -N "noctalia-dynamic" \
+        --shadow      "$shadow" \
+        --accent-dark "$accent_dark" \
+        --accent      "$accent"
+}
 
-# Apply as root — no sudo needed, we already are root
-"$PAPIRUS_FOLDERS" -t "$THEME" -N "$color_name" \
-    --shadow      "$shadow" \
-    --accent-dark "$accent_dark" \
-    --accent      "$accent"
+# Wait for a human user to be available
+until REAL_USER=$(find_human_user) && [ -n "$REAL_USER" ]; do
+    sleep 2
+done
+
+REAL_HOME=$(getent passwd "$REAL_USER" | cut -d: -f6)
+WATCH_DIR="$REAL_HOME/.cache/noctalia"
+COLORS_JSON="$REAL_HOME/.config/noctalia/colors.json"
+
+echo "papirus-sync-systemd: watching '$WATCH_DIR' for '$REAL_USER'"
+
+# Apply once on startup
+[ -f "$COLORS_JSON" ] && apply_accent "$COLORS_JSON"
+
+# Watch for changes with proper debounce via inotifywait
+inotifywait -m -e close_write --format '%f' "$WATCH_DIR" 2>/dev/null | \
+while read -r changed; do
+    case "$changed" in
+        theming.dynamic.toml|theming.predefined.toml|predefined-scheme.json)
+            echo "papirus-sync-systemd: '$changed' changed, syncing..."
+            sleep 2  # debounce — noctalia may write multiple files rapidly
+            apply_accent "$COLORS_JSON"
+            ;;
+    esac
+done
