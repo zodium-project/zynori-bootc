@@ -27,4 +27,3 @@ modules:
             rm -rf /usr/share/icons/Papirus
             ln -s /etc/zodium/icons/Papirus /usr/share/icons/
             ln -s /etc/zodium/icons/Papirus-Dark /usr/share/icons/
-            systemctl enable papirus-accent.service
