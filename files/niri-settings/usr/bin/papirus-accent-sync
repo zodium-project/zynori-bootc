@@ -19,9 +19,10 @@ print(d['mPrimary'].lstrip('#'))
 ")
 
 # --- Convert hex → CIELAB, find nearest Papirus color, apply it ---
-best=$(python3 <<EOF
+best=$(ACCENT_HEX="$accent_hex" python3 <<'EOF'
 import math
 import sys
+import os
 import json as _json
 
 def hex_to_lin(c):
@@ -79,7 +80,9 @@ PAPIRUS_COLORS = {
     "yellow":     "e19d00",
 }
 
-with open("${SETTINGS_JSON}") as _f:
+_accent_hex = os.environ["ACCENT_HEX"]
+
+with open(os.environ["HOME"] + "/.config/noctalia/settings.json") as _f:
     _s = _json.load(_f)
 
 _use_wallpaper = _s["colorSchemes"]["useWallpaperColors"]
@@ -90,8 +93,8 @@ if not _use_wallpaper and _scheme_name in PREDEFINED_SCHEMES:
     print(f"[predefined] scheme='{_scheme_name}' → color='{_color}'", file=sys.stderr)
     print(_color)
 else:
-    print(f"[dynamic] wallpaper mode, matching mPrimary=#{accent_hex} via CIELAB", file=sys.stderr)
-    aL, aa, ab = rgb_to_lab("${accent_hex}")
+    print(f"[dynamic] wallpaper mode, matching mPrimary=#{_accent_hex} via CIELAB", file=sys.stderr)
+    aL, aa, ab = rgb_to_lab(_accent_hex)
     best, dist = None, float('inf')
     for name, h in PAPIRUS_COLORS.items():
         L, a, b = rgb_to_lab(h)
