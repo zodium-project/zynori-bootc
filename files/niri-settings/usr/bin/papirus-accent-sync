@@ -6,7 +6,7 @@ set -euo pipefail
 
 COLORS_JSON="${HOME}/.config/noctalia/colors.json"
 THEME="Papirus-Dark"
-PAPIRUS_FOLDERS="/home/himanshu/Documents/zynori-bootc/files/niri-settings/usr/bin/papirus-folders"
+PAPIRUS_FOLDERS="/usr/bin/papirus-folders"
 
 # --- Read mPrimary hex ---
 accent_hex=$(python3 -c "

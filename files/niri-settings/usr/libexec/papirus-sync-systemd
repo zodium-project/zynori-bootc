@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+find_human_user() {
+    local user uid
+    while read -r user; do
+        uid=$(getent passwd "$user" 2>/dev/null | cut -d: -f3) || continue
+        [ -n "$uid" ] || continue
+        [ "$uid" -ge 1000 ] && [ "$uid" -lt 65534 ] && echo "$user" && return 0
+    done < <(loginctl list-sessions --no-legend | awk '{print $3}' | sort -u)
+    getent passwd | awk -F: '$3 >= 1000 && $3 < 65534 {print $1; exit}'
+}
+
+REAL_USER=$(find_human_user)
+[ -n "$REAL_USER" ] || { echo "papirus-sync-systemd: no human user found"; exit 1; }
+
+REAL_HOME=$(getent passwd "$REAL_USER" | cut -d: -f6)
+COLORS_JSON="$REAL_HOME/.config/noctalia/colors.json"
+THEME="Papirus-Dark"
+PAPIRUS_FOLDERS="/usr/bin/papirus-folders"
+
+echo "papirus-sync-systemd: syncing for '$REAL_USER'"
+
+# Read user config as root (we have permission), compute colors
+accent_hex=$(sudo -u "$REAL_USER" python3 -c "
+import json
+with open('$COLORS_JSON') as f:
+    d = json.load(f)
+print(d['mPrimary'].lstrip('#'))
+")
+
+best=$(ACCENT_HEX="$accent_hex" python3 <<'EOF'
+import os
+
+def darken(hex_str, factor):
+    r, g, b = (int(hex_str[i:i+2], 16) for i in (0, 2, 4))
+    return f"#{max(0,int(r*(1-factor))):02x}{max(0,int(g*(1-factor))):02x}{max(0,int(b*(1-factor))):02x}"
+
+h = os.environ["ACCENT_HEX"]
+print(f"noctalia-dynamic\n{darken(h,0.60)}\n{darken(h,0.20)}\n#{h}")
+EOF
+)
+
+{ read -r color_name; read -r shadow; read -r accent_dark; read -r accent; } <<< "$best"
+
+# Apply as root — no sudo needed, we already are root
+"$PAPIRUS_FOLDERS" -t "$THEME" -N "$color_name" \
+    --shadow      "$shadow" \
+    --accent-dark "$accent_dark" \
+    --accent      "$accent"

@@ -4,4 +4,4 @@ Description=Sync Papirus folder color to Noctalia accent
 [Service]
 Type=oneshot
 ExecStartPre=/bin/sleep 5
-ExecStart=/usr/bin/papirus-sync-systemd
+ExecStart=/usr/libexec/papirus-sync-systemd
