@@ -39,7 +39,6 @@ def rgb_to_lab(hex_str):
 PAPIRUS_COLORS = {
     "adwaita":    "3a87e5",
     "black":      "3f3f3f",
-    "blue":       "4877b1",
     "bluegrey":   "4d646f",
     "breeze":     "147eb8",
     "brown":      "957552",
@@ -53,14 +52,12 @@ PAPIRUS_COLORS = {
     "magenta":    "b259b8",
     "nordic":     "5e81ac",
     "orange":     "dd772f",
-    "palebrown":  "bea389",
     "paleorange": "c89e6b",
     "pink":       "ec407a",
     "red":        "bf4b4b",
     "teal":       "12806a",
     "violet":     "5d399b",
     "white":      "cccccc",
-    "yaru":       "973552",
     "yellow":     "e19d00",
 }
 

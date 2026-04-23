@@ -1,8 +1,8 @@
 [Unit]
-Description=Watch Noctalia colors.json for accent changes
+Description=Watch Noctalia theming for accent changes
 
 [Path]
-PathChanged=%h/.config/noctalia/colors.json
+PathChanged=%h/.cache/noctalia/theming.dynamic.toml
 Unit=papirus-accent.service
 
 [Install]
