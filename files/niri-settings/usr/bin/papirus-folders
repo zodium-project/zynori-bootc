@@ -145,6 +145,7 @@ get_theme_dir() {
 	local -a icons_dirs=(
 		"$USER_HOME/.icons"
 		"${XDG_DATA_HOME:-$USER_HOME/.local/share}/icons"
+		"/etc/zodium/icons"
 	)
 
 	# Get data directories from XDG_DATA_DIRS variable and
