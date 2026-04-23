@@ -93,18 +93,25 @@ if not _use_wallpaper and _scheme_name in PREDEFINED_SCHEMES:
     print(f"[predefined] scheme='{_scheme_name}' → color='{_color}'", file=sys.stderr)
     print(_color)
 else:
-    print(f"[dynamic] wallpaper mode, matching mPrimary=#{_accent_hex} via CIELAB", file=sys.stderr)
-    aL, aa, ab = rgb_to_lab(_accent_hex)
-    best, dist = None, float('inf')
-    for name, h in PAPIRUS_COLORS.items():
-        L, a, b = rgb_to_lab(h)
-        # Ignore L — mPrimary is always pastel so lightness is misleading
-        d = math.sqrt((a-aa)**2 + (b-ab)**2)
-        if d < dist:
-            dist, best = d, name
-    print(f"[dynamic] matched → color='{best}'", file=sys.stderr)
-    print(best)
+    # Derive shadow and accent-dark by darkening mPrimary
+    def darken(hex_str, factor):
+        r, g, b = (int(hex_str[i:i+2], 16) for i in (0, 2, 4))
+        r = max(0, int(r * (1 - factor)))
+        g = max(0, int(g * (1 - factor)))
+        b = max(0, int(b * (1 - factor)))
+        return f"#{r:02x}{g:02x}{b:02x}"
+
+    accent       = f"#{_accent_hex}"
+    accent_dark  = darken(_accent_hex, 0.20)
+    shadow       = darken(_accent_hex, 0.60)
+
+    print(f"[dynamic] mPrimary={accent} → shadow={shadow} accent-dark={accent_dark} accent={accent}", file=sys.stderr)
+    print(f"noctalia-dynamic\n{shadow}\n{accent_dark}\n{accent}")
 EOF
 )
 
-"$PAPIRUS_FOLDERS" -t "$THEME" -C "$best"
+IFS=$'\n' read -r color_name shadow accent_dark accent <<< "$best"
+"$PAPIRUS_FOLDERS" -t "$THEME" -N "$color_name" \
+    --shadow "$shadow" \
+    --accent-dark "$accent_dark" \
+    --accent "$accent"
