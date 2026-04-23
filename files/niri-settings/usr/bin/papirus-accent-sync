@@ -1,14 +1,12 @@
 #!/usr/bin/env bash
-# Reads mPrimary from Noctalia colors.json, finds the nearest
-# Papirus-Dark folder color by CIELAB perceptual distance, applies it.
-# For predefined schemes, uses a hardcoded color map instead.
+# Reads mPrimary from Noctalia colors.json and dynamically derives
+# shadow/accent-dark/accent by darkening it, then applies to Papirus-Dark.
 
 set -euo pipefail
 
 COLORS_JSON="${HOME}/.config/noctalia/colors.json"
-SETTINGS_JSON="${HOME}/.config/noctalia/settings.json"
 THEME="Papirus-Dark"
-PAPIRUS_FOLDERS="/usr/bin/papirus-folders"
+PAPIRUS_FOLDERS="/home/himanshu/Documents/zynori-bootc/files/niri-settings/usr/bin/papirus-folders"
 
 # --- Read mPrimary hex ---
 accent_hex=$(python3 -c "
@@ -18,100 +16,31 @@ with open('${COLORS_JSON}') as f:
 print(d['mPrimary'].lstrip('#'))
 ")
 
-# --- Convert hex → CIELAB, find nearest Papirus color, apply it ---
+# --- Derive shadow and accent-dark by darkening mPrimary ---
 best=$(ACCENT_HEX="$accent_hex" python3 <<'EOF'
-import math
 import sys
 import os
-import json as _json
 
-def hex_to_lin(c):
-    c = c / 255
-    return c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4
-
-def rgb_to_lab(hex_str):
+def darken(hex_str, factor):
     r, g, b = (int(hex_str[i:i+2], 16) for i in (0, 2, 4))
-    lr, lg, lb = hex_to_lin(r), hex_to_lin(g), hex_to_lin(b)
-    x = (lr*0.4124 + lg*0.3576 + lb*0.1805) / 0.95047
-    y = (lr*0.2126 + lg*0.7152 + lb*0.0722) / 1.00000
-    z = (lr*0.0193 + lg*0.1192 + lb*0.9505) / 1.08883
-    def f(t): return t**(1/3) if t > 0.008856 else 7.787*t + 16/116
-    L = 116*f(y) - 16
-    a = 500*(f(x) - f(y))
-    b_ = 200*(f(y) - f(z))
-    return L, a, b_
-
-# Predefined scheme name → Papirus color (no algorithm needed)
-PREDEFINED_SCHEMES = {
-    "Ayu":              "yellow",
-    "Catppuccin":       "violet",
-    "Dracula":          "magenta",
-    "Eldritch":         "teal",
-    "Gruvbox":          "paleorange",
-    "Kanagawa":         "bluegrey",
-    "Noctalia (default)": "orange",
-    "Nord":             "nordic",
-    "Rose Pine":        "violet",
-    "Tokyo Night":      "indigo",
-}
-
-PAPIRUS_COLORS = {
-    "adwaita":    "3a87e5",
-    "black":      "3f3f3f",
-    "bluegrey":   "4d646f",
-    "breeze":     "147eb8",
-    "brown":      "957552",
-    "carmine":    "7a0002",
-    "cyan":       "0096aa",
-    "darkcyan":   "35818a",
-    "deeporange": "e95420",
-    "green":      "60924b",
-    "grey":       "727272",
-    "indigo":     "3f51b5",
-    "magenta":    "b259b8",
-    "nordic":     "5e81ac",
-    "orange":     "dd772f",
-    "paleorange": "c89e6b",
-    "pink":       "ec407a",
-    "red":        "bf4b4b",
-    "teal":       "12806a",
-    "violet":     "5d399b",
-    "white":      "cccccc",
-    "yellow":     "e19d00",
-}
+    r = max(0, int(r * (1 - factor)))
+    g = max(0, int(g * (1 - factor)))
+    b = max(0, int(b * (1 - factor)))
+    return f"#{r:02x}{g:02x}{b:02x}"
 
 _accent_hex = os.environ["ACCENT_HEX"]
 
-with open(os.environ["HOME"] + "/.config/noctalia/settings.json") as _f:
-    _s = _json.load(_f)
+accent      = f"#{_accent_hex}"
+accent_dark = darken(_accent_hex, 0.20)
+shadow      = darken(_accent_hex, 0.60)
 
-_use_wallpaper = _s["colorSchemes"]["useWallpaperColors"]
-_scheme_name   = _s["colorSchemes"]["predefinedScheme"]
-
-if not _use_wallpaper and _scheme_name in PREDEFINED_SCHEMES:
-    _color = PREDEFINED_SCHEMES[_scheme_name]
-    print(f"[predefined] scheme='{_scheme_name}' → color='{_color}'", file=sys.stderr)
-    print(_color)
-else:
-    # Derive shadow and accent-dark by darkening mPrimary
-    def darken(hex_str, factor):
-        r, g, b = (int(hex_str[i:i+2], 16) for i in (0, 2, 4))
-        r = max(0, int(r * (1 - factor)))
-        g = max(0, int(g * (1 - factor)))
-        b = max(0, int(b * (1 - factor)))
-        return f"#{r:02x}{g:02x}{b:02x}"
-
-    accent       = f"#{_accent_hex}"
-    accent_dark  = darken(_accent_hex, 0.20)
-    shadow       = darken(_accent_hex, 0.60)
-
-    print(f"[dynamic] mPrimary={accent} → shadow={shadow} accent-dark={accent_dark} accent={accent}", file=sys.stderr)
-    print(f"noctalia-dynamic\n{shadow}\n{accent_dark}\n{accent}")
+print(f"[dynamic] mPrimary={accent} → shadow={shadow} accent-dark={accent_dark} accent={accent}", file=sys.stderr)
+print(f"noctalia-dynamic\n{shadow}\n{accent_dark}\n{accent}")
 EOF
 )
 
-IFS=$'\n' read -r color_name shadow accent_dark accent <<< "$best"
-"$PAPIRUS_FOLDERS" -t "$THEME" -N "$color_name" \
+{ read -r color_name; read -r shadow; read -r accent_dark; read -r accent; } <<< "$best"
+sudo "$PAPIRUS_FOLDERS" -t "$THEME" -N "$color_name" \
     --shadow "$shadow" \
     --accent-dark "$accent_dark" \
     --accent "$accent"
