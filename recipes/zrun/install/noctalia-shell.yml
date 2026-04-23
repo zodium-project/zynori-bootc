@@ -12,6 +12,7 @@ modules:
           - noctalia-qs
           - noctalia-shell
           - nwg-look
+          - ddcutil
           - evolution-data-server
           - breeze-cursor-theme
           - papirus-icon-theme
