@@ -21,9 +21,9 @@ fatal() { err "$*"; exit 1; }
 
 usage() {
     cat <<-EOF
-    USAGE
-      papirus-color-sync --shadow <#rrggbb> --accent-dark <#rrggbb> --accent <#rrggbb>
-    EOF
+	USAGE
+	  papirus-color-sync --shadow <#rrggbb> --accent-dark <#rrggbb> --accent <#rrggbb>
+	EOF
     exit "${1:-0}"
 }
 
