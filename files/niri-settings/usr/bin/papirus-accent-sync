@@ -98,7 +98,8 @@ else:
     best, dist = None, float('inf')
     for name, h in PAPIRUS_COLORS.items():
         L, a, b = rgb_to_lab(h)
-        d = math.sqrt((L-aL)**2 + (a-aa)**2 + (b-ab)**2)
+        # Ignore L — mPrimary is always pastel so lightness is misleading
+        d = math.sqrt((a-aa)**2 + (b-ab)**2)
         if d < dist:
             dist, best = d, name
     print(f"[dynamic] matched → color='{best}'", file=sys.stderr)
