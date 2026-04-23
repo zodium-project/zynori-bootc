@@ -1,0 +1,9 @@
+[Unit]
+Description=Watch Noctalia colors.json for accent changes
+
+[Path]
+PathChanged=%h/.config/noctalia/colors.json
+Unit=papirus-accent.service
+
+[Install]
+WantedBy=default.target

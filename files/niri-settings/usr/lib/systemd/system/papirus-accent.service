@@ -1,0 +1,8 @@
+[Unit]
+Description=Sync Papirus folder color to Noctalia accent
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/papirus-accent-sync
+# Small delay so Noctalia finishes writing the file
+ExecStartPre=/bin/sleep 1.5

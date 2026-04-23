@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+# Reads mPrimary from Noctalia colors.json, finds the nearest
+# Papirus-Dark folder color by CIELAB perceptual distance, applies it.
+
+set -euo pipefail
+
+COLORS_JSON="${HOME}/.config/noctalia/colors.json"
+THEME="Papirus-Dark"
+PAPIRUS_FOLDERS="/usr/bin/papirus-folders"
+
+# --- Read mPrimary hex ---
+hex=$(python3 -c "
+import json
+with open('${COLORS_JSON}') as f:
+    d = json.load(f)
+print(d['mPrimary'].lstrip('#'))
+")
+
+# --- Convert hex → CIELAB, find nearest Papirus color, apply it ---
+best=$(python3 <<EOF
+import math
+
+def hex_to_lin(c):
+    c = c / 255
+    return c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4
+
+def rgb_to_lab(hex_str):
+    r, g, b = (int(hex_str[i:i+2], 16) for i in (0, 2, 4))
+    lr, lg, lb = hex_to_lin(r), hex_to_lin(g), hex_to_lin(b)
+    x = (lr*0.4124 + lg*0.3576 + lb*0.1805) / 0.95047
+    y = (lr*0.2126 + lg*0.7152 + lb*0.0722) / 1.00000
+    z = (lr*0.0193 + lg*0.1192 + lb*0.9505) / 1.08883
+    def f(t): return t**(1/3) if t > 0.008856 else 7.787*t + 16/116
+    L = 116*f(y) - 16
+    a = 500*(f(x) - f(y))
+    b_ = 200*(f(y) - f(z))
+    return L, a, b_
+
+PAPIRUS_COLORS = {
+    "adwaita":    "3a87e5",
+    "black":      "3f3f3f",
+    "blue":       "4877b1",
+    "bluegrey":   "4d646f",
+    "breeze":     "147eb8",
+    "brown":      "957552",
+    "carmine":    "7a0002",
+    "cyan":       "0096aa",
+    "darkcyan":   "35818a",
+    "deeporange": "e95420",
+    "green":      "60924b",
+    "grey":       "727272",
+    "indigo":     "3f51b5",
+    "magenta":    "b259b8",
+    "nordic":     "5e81ac",
+    "orange":     "dd772f",
+    "palebrown":  "bea389",
+    "paleorange": "c89e6b",
+    "pink":       "ec407a",
+    "red":        "bf4b4b",
+    "teal":       "12806a",
+    "violet":     "5d399b",
+    "white":      "cccccc",
+    "yaru":       "973552",
+    "yellow":     "e19d00",
+}
+
+aL, aa, ab = rgb_to_lab("${hex}")
+
+best, dist = None, float('inf')
+for name, h in PAPIRUS_COLORS.items():
+    L, a, b = rgb_to_lab(h)
+    d = math.sqrt((L-aL)**2 + (a-aa)**2 + (b-ab)**2)
+    if d < dist:
+        dist, best = d, name
+
+print(best)
+EOF
+)
+
+"$PAPIRUS_FOLDERS" -t "$THEME" -C "$best"
