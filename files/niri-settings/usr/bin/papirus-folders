@@ -52,11 +52,13 @@ usage() {
 	cat <<- EOF
 	USAGE
 	  $ $PROGNAME [options] -t <theme> {-C --color} <color>
+	  $ $PROGNAME [options] -t <theme> {-N --new} <name> --shadow <#rrggbb> --accent-dark <#rrggbb> --accent <#rrggbb>
 	  $ $PROGNAME [options] -t <theme> {-D --default}
 	  $ $PROGNAME [options] -t <theme> {-R --restore}
 
 	OPERATIONS
 	  -C --color <color>  change color of folders
+	  -N --new <name>     create new color scheme and switch to it
 	  -D --default        back to the default color
 	  -R --restore        restore the last used color from the config file
 
@@ -111,6 +113,29 @@ _is_valid_color() {
 	done
 
 	return 1
+}
+
+_is_valid_hex() {
+	local hex="$1"
+	if ! [[ "$hex" =~ ^#[0-9A-Fa-f]{6}$ ]]; then
+		err "Invalid hex color: '$hex'. Must be in format #rrggbb"
+		return 0
+	else
+		return 1
+	fi
+}
+
+validate_hexes() {
+	local colors=("$COLOR_SHADOW" "$COLOR_ACCENT_DARK" "$COLOR_ACCENT")
+	local validated=1
+	for c in "${colors[@]}"; do
+		if _is_valid_hex "$c"; then
+			validated=0
+		fi
+	done
+	if [ ! $validated -eq 1 ]; then
+		fatal "One or more arguments have invalid hex colors."
+	fi
 }
 
 declare_colors() {
@@ -311,6 +336,33 @@ do_change_color() {
 	esac
 }
 
+do_new_scheme() {
+	if _is_valid_color "$SELECTED_COLOR"; then
+		msg 'Theme exists already, reapplying with new colors...'
+		# Remove existing files so we can recreate with updated colors
+		local regex=".*-${SELECTED_COLOR}\(\.\|\-\).*"
+		find "$THEME_DIR"/*/places -type f -regex "$regex" -print0 | xargs --null rm -f
+	fi
+
+	validate_hexes
+	verify_privileges
+
+	msg "Copying default files to new color scheme '$SELECTED_COLOR'..."
+	local regex_blue=".*-blue\(\.\|\-\).*"
+	find "$THEME_DIR"/*/places -type f -regex "$regex_blue" -print0 | while IFS= read -r -d '' src; do
+		dst="${src/blue/${SELECTED_COLOR}}"
+		cp -p "$src" "$dst"
+	done
+
+	local regex=".*-${SELECTED_COLOR}\(\.\|\-\).*"
+	find "$THEME_DIR"/*/places -type f -regex "$regex" -print0 | xargs --null sed -i \
+		-e "s/#1d344f/$COLOR_SHADOW/g" \
+		-e "s/#4877b1/$COLOR_ACCENT_DARK/g" \
+		-e "s/#5294e2/$COLOR_ACCENT/g"
+
+	do_change_color
+}
+
 do_revert_default() {
 	verify_privileges
 
@@ -426,6 +478,10 @@ parse_args() {
 			--update-caches)  args+=( -u ) ;;
 			--verbose)        args+=( -v ) ;;
 			--color|--colour) args+=( -C ) ;;
+			--new)            args+=( -N ) ;;
+			--shadow)         args+=( -s ) ;;
+			--accent-dark)    args+=( -d ) ;;
+			--accent)         args+=( -a ) ;;
 			--default)        args+=( -D ) ;;
 			--restore)        args+=( -R ) ;;
 			--version)        args+=( -V ) ;;
@@ -440,11 +496,17 @@ parse_args() {
 	# Reset the positional parameters to the short options
 	set -- "${args[@]}"
 
-	while getopts ":C:DRlot:uvVh" opt; do
+	while getopts ":C:N:DRlot:uvVhs:d:a:" opt; do
 		case "$opt" in
 			C ) OPERATIONS+=("change-color")
 				SELECTED_COLOR="$OPTARG"
 				;;
+			N ) OPERATIONS+=("new-scheme")
+				SELECTED_COLOR="$OPTARG"
+				;;
+			s ) COLOR_SHADOW="$OPTARG" ;;
+			d ) COLOR_ACCENT_DARK="$OPTARG" ;;
+			a ) COLOR_ACCENT="$OPTARG" ;;
 			D ) OPERATIONS+=("revert-default") ;;
 			R ) OPERATIONS+=("restore-color") ;;
 			l ) OPERATIONS+=("list-colors") ;;
@@ -486,6 +548,9 @@ main() {
 	)
 
 	declare SELECTED_COLOR=''
+	declare COLOR_SHADOW=''
+	declare COLOR_ACCENT_DARK=''
+	declare COLOR_ACCENT=''
 	declare -a OPERATIONS=()
 
 	parse_args "${ARGS[@]}"
@@ -516,6 +581,9 @@ main() {
 		case "$operation" in
 			change-color)
 				do_change_color
+				;;
+			new-scheme)
+				do_new_scheme
 				;;
 			revert-default)
 				do_revert_default
