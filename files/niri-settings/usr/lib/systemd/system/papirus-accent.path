@@ -3,6 +3,8 @@ Description=Watch Noctalia theming for accent changes
 
 [Path]
 PathChanged=%h/.cache/noctalia/theming.dynamic.toml
+PathChanged=%h/.cache/noctalia/theming.predefined.toml
+PathChanged=%h/.cache/noctalia/predefined-scheme.json
 Unit=papirus-accent.service
 
 [Install]
