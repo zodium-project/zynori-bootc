@@ -4,6 +4,13 @@ set -euo pipefail
 LOCK="/run/papirus-accent.lock"
 PENDING="/run/papirus-accent.pending"
 
+# --- Logging ---
+log() { echo "papirus-sync-systemd: $*" | systemd-cat -t papirus-accent -p info; }
+err() { echo "papirus-sync-systemd: $*" | systemd-cat -t papirus-accent -p err; }
+
+# --- Cleanup on exit ---
+trap 'rm -f "$LOCK" "$PENDING"; wait' EXIT INT TERM
+
 find_human_user() {
     local user uid
     while read -r user; do
@@ -14,64 +21,70 @@ find_human_user() {
     getent passwd | awk -F: '$3 >= 1000 && $3 < 65534 {print $1; exit}'
 }
 
+darken() {
+    local hex="$1" factor="$2"
+    local r g b
+    r=$(( 16#${hex:0:2} ))
+    g=$(( 16#${hex:2:2} ))
+    b=$(( 16#${hex:4:2} ))
+    r=$(( r * (100 - factor) / 100 ))
+    g=$(( g * (100 - factor) / 100 ))
+    b=$(( b * (100 - factor) / 100 ))
+    printf "#%02x%02x%02x" $r $g $b
+}
+
 apply_accent() {
     local colors_json="$1"
 
+    # Guard — colors.json may not exist yet
+    if [ ! -f "$colors_json" ]; then
+        err "colors.json missing at '$colors_json', skipping"
+        return 0
+    fi
+
+    local accent_hex
     accent_hex=$(python3 -c "
 import json
 with open('$colors_json') as f:
     d = json.load(f)
 print(d['mPrimary'].lstrip('#'))
-")
+") || { err "failed to parse colors.json"; return 0; }
 
-    darken() {
-        local hex="$1" factor="$2"
-        local r g b
-        r=$(( 16#${hex:0:2} ))
-        g=$(( 16#${hex:2:2} ))
-        b=$(( 16#${hex:4:2} ))
-        r=$(( r * (100 - factor) / 100 ))
-        g=$(( g * (100 - factor) / 100 ))
-        b=$(( b * (100 - factor) / 100 ))
-        printf "#%02x%02x%02x" $r $g $b
-    }
-
-    local accent="#${accent_hex}"
-    local accent_dark shadow
+    local accent accent_dark shadow
+    accent="#${accent_hex}"
     accent_dark=$(darken "$accent_hex" 20)
     shadow=$(darken "$accent_hex" 60)
 
-    echo "papirus-sync-systemd: applying accent=$accent shadow=$shadow accent_dark=$accent_dark"
+    log "applying accent=$accent shadow=$shadow accent_dark=$accent_dark"
 
-    /usr/bin/papirus-folders -t "Papirus-Dark" -N "noctalia-dynamic" \
+    if ! /usr/bin/papirus-folders -t "Papirus-Dark" -N "noctalia-dynamic" \
         --shadow      "$shadow" \
         --accent-dark "$accent_dark" \
-        --accent      "$accent"
+        --accent      "$accent"; then
+        err "papirus-folders failed, will retry on next theme change"
+    fi
 }
 
 apply_worker() {
-    # Worker loop — holds the lock, drains pending flag, applies latest
-    while true; do
-        # Acquire lock
-        (
-            flock -n 9 || exit 0  # another worker already running, exit
+    (
+        flock -n 9 || exit 0  # another worker holds lock, it will handle pending
 
-            while [ -f "$PENDING" ]; do
-                rm -f "$PENDING"
-                # Drain any further rapid changes — wait for writes to settle
-                sleep 2
-                # If more changes came in during sleep, loop again
-            done
+        while [ -f "$PENDING" ]; do
+            rm -f "$PENDING"
+            sleep 2  # settle window — more changes reset PENDING and loop again
+        done
 
-            apply_accent "$COLORS_JSON"
+        apply_accent "$COLORS_JSON"
 
-        ) 9>"$LOCK"
-        break
-    done
+    ) 9>"$LOCK"
+
+    # Reap any finished background workers
+    wait -n 2>/dev/null || true
 }
 
-# Wait for a human user to be available
+# --- Wait for human user ---
 until REAL_USER=$(find_human_user) && [ -n "$REAL_USER" ]; do
+    log "waiting for human user..."
     sleep 2
 done
 
@@ -79,19 +92,30 @@ REAL_HOME=$(getent passwd "$REAL_USER" | cut -d: -f6)
 WATCH_DIR="$REAL_HOME/.cache/noctalia"
 COLORS_JSON="$REAL_HOME/.config/noctalia/colors.json"
 
-echo "papirus-sync-systemd: watching '$WATCH_DIR' for '$REAL_USER'"
+# --- Wait for watch dir to exist ---
+until [ -d "$WATCH_DIR" ]; do
+    log "waiting for '$WATCH_DIR' to exist..."
+    sleep 2
+done
 
-# Apply once on startup
-[ -f "$COLORS_JSON" ] && apply_accent "$COLORS_JSON"
+log "watching '$WATCH_DIR' for '$REAL_USER'"
 
-# Watch for changes
-inotifywait -m -e close_write --format '%f' "$WATCH_DIR" 2>/dev/null | \
-while read -r changed; do
-    case "$changed" in
-        theming.dynamic.toml|theming.predefined.toml|predefined-scheme.json)
-            echo "papirus-sync-systemd: '$changed' changed, queuing..."
-            touch "$PENDING"          # mark that a change is pending
-            apply_worker &            # fire worker in background
-            ;;
-    esac
+# --- Apply once on startup ---
+apply_accent "$COLORS_JSON"
+
+# --- Watch for changes, restart inotifywait if it dies ---
+while true; do
+    inotifywait -m -e close_write --format '%f' "$WATCH_DIR" 2>/dev/null | \
+    while read -r changed; do
+        case "$changed" in
+            theming.dynamic.toml|theming.predefined.toml|predefined-scheme.json)
+                log "'$changed' changed, queuing..."
+                touch "$PENDING"
+                apply_worker &
+                ;;
+        esac
+    done
+
+    err "inotifywait exited unexpectedly, restarting watch in 1s..."
+    sleep 1
 done
