@@ -11,7 +11,7 @@ THEME="Papirus-Dark"
 PAPIRUS_FOLDERS="/usr/bin/papirus-folders"
 
 # --- Read mPrimary hex ---
-hex=$(python3 -c "
+accent_hex=$(python3 -c "
 import json
 with open('${COLORS_JSON}') as f:
     d = json.load(f)
@@ -44,13 +44,13 @@ def rgb_to_lab(hex_str):
 PREDEFINED_SCHEMES = {
     "Ayu":              "yellow",
     "Catppuccin":       "violet",
-    "Dracula":          "violet",
+    "Dracula":          "magenta",
     "Eldritch":         "teal",
-    "Gruvbox":          "yellow",
-    "Kanagawa":         "nordic",
+    "Gruvbox":          "paleorange",
+    "Kanagawa":         "bluegrey",
     "Noctalia-default": "yellow",
     "Nord":             "nordic",
-    "Rosepine":         "pink",
+    "Rose Pine":        "violet",
     "Tokyo-Night":      "blue",
 }
 
@@ -90,8 +90,8 @@ if not _use_wallpaper and _scheme_name in PREDEFINED_SCHEMES:
     print(f"[predefined] scheme='{_scheme_name}' → color='{_color}'", file=sys.stderr)
     print(_color)
 else:
-    print(f"[dynamic] wallpaper mode, matching mPrimary=#{hex} via CIELAB", file=sys.stderr)
-    aL, aa, ab = rgb_to_lab("${hex}")
+    print(f"[dynamic] wallpaper mode, matching mPrimary=#{accent_hex} via CIELAB", file=sys.stderr)
+    aL, aa, ab = rgb_to_lab("${accent_hex}")
     best, dist = None, float('inf')
     for name, h in PAPIRUS_COLORS.items():
         L, a, b = rgb_to_lab(h)
