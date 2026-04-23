@@ -83,9 +83,14 @@ with open("${HOME}/.config/noctalia/settings.json") as _f:
 _use_wallpaper = _s["colorSchemes"]["useWallpaperColors"]
 _scheme_name   = _s["colorSchemes"]["predefinedScheme"]
 
+import sys
+
 if not _use_wallpaper and _scheme_name in PREDEFINED_SCHEMES:
-    print(PREDEFINED_SCHEMES[_scheme_name])
+    _color = PREDEFINED_SCHEMES[_scheme_name]
+    print(f"[predefined] scheme='{_scheme_name}' → color='{_color}'", file=sys.stderr)
+    print(_color)
 else:
+    print(f"[dynamic] wallpaper mode, matching mPrimary=#{hex} via CIELAB", file=sys.stderr)
     aL, aa, ab = rgb_to_lab("${hex}")
     best, dist = None, float('inf')
     for name, h in PAPIRUS_COLORS.items():
@@ -93,6 +98,7 @@ else:
         d = math.sqrt((L-aL)**2 + (a-aa)**2 + (b-ab)**2)
         if d < dist:
             dist, best = d, name
+    print(f"[dynamic] matched → color='{best}'", file=sys.stderr)
     print(best)
 EOF
 )
