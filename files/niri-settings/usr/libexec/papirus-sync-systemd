@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+LOCK="/run/papirus-accent.lock"
+PENDING="/run/papirus-accent.pending"
+
 find_human_user() {
     local user uid
     while read -r user; do
@@ -21,7 +24,6 @@ with open('$colors_json') as f:
 print(d['mPrimary'].lstrip('#'))
 ")
 
-    # Pure bash hex darkening — no python needed
     darken() {
         local hex="$1" factor="$2"
         local r g b
@@ -47,6 +49,27 @@ print(d['mPrimary'].lstrip('#'))
         --accent      "$accent"
 }
 
+apply_worker() {
+    # Worker loop — holds the lock, drains pending flag, applies latest
+    while true; do
+        # Acquire lock
+        (
+            flock -n 9 || exit 0  # another worker already running, exit
+
+            while [ -f "$PENDING" ]; do
+                rm -f "$PENDING"
+                # Drain any further rapid changes — wait for writes to settle
+                sleep 2
+                # If more changes came in during sleep, loop again
+            done
+
+            apply_accent "$COLORS_JSON"
+
+        ) 9>"$LOCK"
+        break
+    done
+}
+
 # Wait for a human user to be available
 until REAL_USER=$(find_human_user) && [ -n "$REAL_USER" ]; do
     sleep 2
@@ -61,14 +84,14 @@ echo "papirus-sync-systemd: watching '$WATCH_DIR' for '$REAL_USER'"
 # Apply once on startup
 [ -f "$COLORS_JSON" ] && apply_accent "$COLORS_JSON"
 
-# Watch for changes with proper debounce via inotifywait
+# Watch for changes
 inotifywait -m -e close_write --format '%f' "$WATCH_DIR" 2>/dev/null | \
 while read -r changed; do
     case "$changed" in
         theming.dynamic.toml|theming.predefined.toml|predefined-scheme.json)
-            echo "papirus-sync-systemd: '$changed' changed, syncing..."
-            sleep 2  # debounce — noctalia may write multiple files rapidly
-            apply_accent "$COLORS_JSON"
+            echo "papirus-sync-systemd: '$changed' changed, queuing..."
+            touch "$PENDING"          # mark that a change is pending
+            apply_worker &            # fire worker in background
             ;;
     esac
 done
