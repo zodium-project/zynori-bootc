@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 # Reads mPrimary from Noctalia colors.json, finds the nearest
 # Papirus-Dark folder color by CIELAB perceptual distance, applies it.
+# For predefined schemes, uses a hardcoded color map instead.
 
 set -euo pipefail
 
 COLORS_JSON="${HOME}/.config/noctalia/colors.json"
+SETTINGS_JSON="${HOME}/.config/noctalia/settings.json"
 THEME="Papirus-Dark"
 PAPIRUS_FOLDERS="/usr/bin/papirus-folders"
 
@@ -19,6 +21,8 @@ print(d['mPrimary'].lstrip('#'))
 # --- Convert hex → CIELAB, find nearest Papirus color, apply it ---
 best=$(python3 <<EOF
 import math
+import sys
+import json as _json
 
 def hex_to_lin(c):
     c = c / 255
@@ -75,15 +79,11 @@ PAPIRUS_COLORS = {
     "yellow":     "e19d00",
 }
 
-import json as _json
-
-with open("${HOME}/.config/noctalia/settings.json") as _f:
+with open("${SETTINGS_JSON}") as _f:
     _s = _json.load(_f)
 
 _use_wallpaper = _s["colorSchemes"]["useWallpaperColors"]
 _scheme_name   = _s["colorSchemes"]["predefinedScheme"]
-
-import sys
 
 if not _use_wallpaper and _scheme_name in PREDEFINED_SCHEMES:
     _color = PREDEFINED_SCHEMES[_scheme_name]
