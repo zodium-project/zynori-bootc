@@ -1,0 +1,154 @@
+#!/usr/bin/env bash
+# papirus-color-sync — minimal Papirus folder color syncer
+
+set -euo pipefail
+
+# adjust these if paths/names change in the future
+# ============================================================
+ICONS_BASE="/etc/zodium/icons"
+THEME_NAME="Papirus-Dark"
+THEME_DIR="$ICONS_BASE/$THEME_NAME"
+COLOR_NAME="noctalia-dynamic"
+BASE_COLOR="blue"
+SIZES=(22x22 24x24 32x32 48x48 64x64)
+PREFIXES=("folder" "user")
+SYNC_FILE="$THEME_DIR/.papirus-sync"
+# ============================================================
+
+msg()   { printf "papirus-color-sync: %s\n" "$*"; }
+err()   { printf "papirus-color-sync: error: %s\n" "$*" >&2; }
+fatal() { err "$*"; exit 1; }
+
+usage() {
+    cat <<-EOF
+    USAGE
+      papirus-color-sync --shadow <#rrggbb> --accent-dark <#rrggbb> --accent <#rrggbb>
+    EOF
+    exit "${1:-0}"
+}
+
+validate_hex() {
+    local hex="$1" name="$2"
+    [[ "$hex" =~ ^#[0-9A-Fa-f]{6}$ ]] || fatal "invalid hex for $name: '$hex' (expected #rrggbb)"
+}
+
+read_sync_file() {
+    # sets SAVED_SHADOW, SAVED_ACCENT_DARK, SAVED_ACCENT; empty strings if missing
+    SAVED_SHADOW=""
+    SAVED_ACCENT_DARK=""
+    SAVED_ACCENT=""
+    [ -f "$SYNC_FILE" ] || return 0
+    while IFS='=' read -r key val; do
+        case "$key" in
+            shadow)       SAVED_SHADOW="$val" ;;
+            accent-dark)  SAVED_ACCENT_DARK="$val" ;;
+            accent)       SAVED_ACCENT="$val" ;;
+        esac
+    done < "$SYNC_FILE"
+}
+
+write_sync_file() {
+    cat > "$SYNC_FILE" <<-EOF
+	shadow=$COLOR_SHADOW
+	accent-dark=$COLOR_ACCENT_DARK
+	accent=$COLOR_ACCENT
+	EOF
+}
+
+do_new_scheme() {
+    # Remove existing noctalia-dynamic files so we get a clean slate
+    local regex=".*-${COLOR_NAME}\(\.\|\-\).*"
+    find "$THEME_DIR"/*/places -type f -regex "$regex" -print0 \
+        | xargs --no-run-if-empty --null rm -f
+
+    msg "copying base '$BASE_COLOR' files to '$COLOR_NAME'..."
+    local regex_base=".*-${BASE_COLOR}\(\.\|\-\).*"
+    find "$THEME_DIR"/*/places -type f -regex "$regex_base" -print0 \
+        | while IFS= read -r -d '' src; do
+            dst="${src/$BASE_COLOR/$COLOR_NAME}"
+            cp -p "$src" "$dst"
+        done
+
+    msg "applying colors (shadow=$COLOR_SHADOW accent-dark=$COLOR_ACCENT_DARK accent=$COLOR_ACCENT)..."
+    local regex_dynamic=".*-${COLOR_NAME}\(\.\|\-\).*"
+    find "$THEME_DIR"/*/places -type f -regex "$regex_dynamic" -print0 \
+        | xargs --no-run-if-empty --null sed -i \
+            -e "s/#1d344f/$COLOR_SHADOW/g" \
+            -e "s/#4877b1/$COLOR_ACCENT_DARK/g" \
+            -e "s/#5294e2/$COLOR_ACCENT/g"
+}
+
+change_color() {
+    local size prefix file_path file_name symlink_path
+
+    for size in "${SIZES[@]}"; do
+        for prefix_base in "${PREFIXES[@]}"; do
+            local prefix="${prefix_base}-${COLOR_NAME}"
+            for file_path in "$THEME_DIR/$size/places/$prefix"{-*,}.svg; do
+                [ -f "$file_path" ] || continue
+                [ -L "$file_path" ] && continue
+
+                file_name="${file_path##*/}"
+                symlink_path="${file_path/-$COLOR_NAME/}"
+
+                ln -sf "$file_name" "$symlink_path" || \
+                    fatal "failed to create symlink '$symlink_path'"
+            done
+        done
+    done
+}
+
+update_icon_cache() {
+    msg "rebuilding icon cache for '$THEME_NAME'..."
+    gtk-update-icon-cache -qf "$THEME_DIR" || true
+}
+
+parse_args() {
+    COLOR_SHADOW=""
+    COLOR_ACCENT_DARK=""
+    COLOR_ACCENT=""
+
+    [ "$#" -gt 0 ] || usage 2
+
+    while [ "$#" -gt 0 ]; do
+        case "$1" in
+            --shadow)       COLOR_SHADOW="$2";      shift 2 ;;
+            --accent-dark)  COLOR_ACCENT_DARK="$2"; shift 2 ;;
+            --accent)       COLOR_ACCENT="$2";      shift 2 ;;
+            --help|-h)      usage 0 ;;
+            *) err "unknown option: '$1'"; usage 2 ;;
+        esac
+    done
+
+    [ -n "$COLOR_SHADOW" ]       || fatal "--shadow is required"
+    [ -n "$COLOR_ACCENT_DARK" ]  || fatal "--accent-dark is required"
+    [ -n "$COLOR_ACCENT" ]       || fatal "--accent is required"
+
+    validate_hex "$COLOR_SHADOW"      "shadow"
+    validate_hex "$COLOR_ACCENT_DARK" "accent-dark"
+    validate_hex "$COLOR_ACCENT"      "accent"
+}
+
+main() {
+    parse_args "$@"
+
+    [ -d "$THEME_DIR" ] || fatal "theme dir not found: '$THEME_DIR'"
+
+    read_sync_file
+
+    if  [ "$SAVED_SHADOW"       = "$COLOR_SHADOW"       ] && \
+        [ "$SAVED_ACCENT_DARK"  = "$COLOR_ACCENT_DARK"  ] && \
+        [ "$SAVED_ACCENT"       = "$COLOR_ACCENT"       ]; then
+        msg "colors unchanged, skipping."
+        exit 0
+    fi
+
+    do_new_scheme
+    change_color
+    write_sync_file
+    update_icon_cache
+
+    msg "done."
+}
+
+main "$@"

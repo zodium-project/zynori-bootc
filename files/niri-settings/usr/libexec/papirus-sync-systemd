@@ -57,11 +57,11 @@ print(d['mPrimary'].lstrip('#'))
 
     log "applying accent=$accent shadow=$shadow accent_dark=$accent_dark"
 
-    if ! /usr/bin/papirus-folders -t "Papirus-Dark" -N "noctalia-dynamic" \
+    if ! /usr/libexec/papirus-color-sync \
         --shadow      "$shadow" \
         --accent-dark "$accent_dark" \
         --accent      "$accent"; then
-        err "papirus-folders failed, will retry on next theme change"
+        err "papirus-color-sync failed, will retry on next theme change"
     fi
 }
 
