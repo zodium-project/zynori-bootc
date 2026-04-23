@@ -8,7 +8,6 @@ modules:
       packages:
           - niri
           - wlsunset
-          - inotify-tools
           - brightnessctl
           - wl-clipboard
           - power-profiles-daemon
