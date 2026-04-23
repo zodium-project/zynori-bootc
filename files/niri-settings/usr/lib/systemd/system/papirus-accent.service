@@ -6,6 +6,7 @@ After=multi-user.target
 Type=simple
 ExecStart=/usr/libexec/papirus-sync-systemd
 Restart=on-failure
+RestartSec=5
 
 [Install]
 WantedBy=multi-user.target
