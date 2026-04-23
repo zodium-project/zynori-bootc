@@ -36,6 +36,20 @@ def rgb_to_lab(hex_str):
     b_ = 200*(f(y) - f(z))
     return L, a, b_
 
+# Predefined scheme name → Papirus color (no algorithm needed)
+PREDEFINED_SCHEMES = {
+    "Ayu":              "yellow",
+    "Catppuccin":       "violet",
+    "Dracula":          "violet",
+    "Eldritch":         "teal",
+    "Gruvbox":          "yellow",
+    "Kanagawa":         "nordic",
+    "Noctalia-default": "yellow",
+    "Nord":             "nordic",
+    "Rosepine":         "pink",
+    "Tokyo-Night":      "blue",
+}
+
 PAPIRUS_COLORS = {
     "adwaita":    "3a87e5",
     "black":      "3f3f3f",
@@ -61,16 +75,25 @@ PAPIRUS_COLORS = {
     "yellow":     "e19d00",
 }
 
-aL, aa, ab = rgb_to_lab("${hex}")
+import json as _json
 
-best, dist = None, float('inf')
-for name, h in PAPIRUS_COLORS.items():
-    L, a, b = rgb_to_lab(h)
-    d = math.sqrt((L-aL)**2 + (a-aa)**2 + (b-ab)**2)
-    if d < dist:
-        dist, best = d, name
+with open("${HOME}/.config/noctalia/settings.json") as _f:
+    _s = _json.load(_f)
 
-print(best)
+_use_wallpaper = _s["colorSchemes"]["useWallpaperColors"]
+_scheme_name   = _s["colorSchemes"]["predefinedScheme"]
+
+if not _use_wallpaper and _scheme_name in PREDEFINED_SCHEMES:
+    print(PREDEFINED_SCHEMES[_scheme_name])
+else:
+    aL, aa, ab = rgb_to_lab("${hex}")
+    best, dist = None, float('inf')
+    for name, h in PAPIRUS_COLORS.items():
+        L, a, b = rgb_to_lab(h)
+        d = math.sqrt((L-aL)**2 + (a-aa)**2 + (b-ab)**2)
+        if d < dist:
+            dist, best = d, name
+    print(best)
 EOF
 )
 
