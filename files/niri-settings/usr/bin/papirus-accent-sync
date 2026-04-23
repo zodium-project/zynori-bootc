@@ -49,10 +49,10 @@ PREDEFINED_SCHEMES = {
     "Eldritch":         "teal",
     "Gruvbox":          "paleorange",
     "Kanagawa":         "bluegrey",
-    "Noctalia-default": "yellow",
+    "Noctalia (default)": "orange",
     "Nord":             "nordic",
     "Rose Pine":        "violet",
-    "Tokyo-Night":      "blue",
+    "Tokyo Night":      "indigo",
 }
 
 PAPIRUS_COLORS = {
