@@ -50,3 +50,7 @@ modules:
        sed -i 's/property string predefinedScheme: "Noctalia (default)"/property string predefinedScheme: "Ayu"/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
        sed -i 's/property list<var> activeTemplates: \[\]/property list<var> activeTemplates: [{"id": "gtk", "enabled": true}, {"id": "kcolorscheme", "enabled": true}, {"id": "qt", "enabled": true}]/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
        sed -i '/property JsonObject idle: JsonObject {/{n; s/property bool enabled: false/property bool enabled: true/}' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
+       sed -i 's/property bool enableLockScreenMediaControls: false/property bool enableLockScreenMediaControls: true/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
+       sed -i 's/property int shadowOffsetX: 2/property int shadowOffsetX: 0/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
+       sed -i 's/property int shadowOffsetY: 3/property int shadowOffsetY: 0/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
+       sed -i 's/property list<string> transitionType: \["fade", "disc", "stripes", "wipe", "pixelate", "honeycomb"\]/property list<string> transitionType: ["fade"]/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
