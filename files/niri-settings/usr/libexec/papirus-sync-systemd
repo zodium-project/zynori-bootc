@@ -71,7 +71,7 @@ apply_worker() {
 
         while [ -f "$PENDING" ]; do
             rm -f "$PENDING"
-            sleep 2  # settle window — more changes reset PENDING and loop again
+            sleep 1  # colors.json is the final write, minimal settle needed
         done
 
         apply_accent "$COLORS_JSON"
@@ -89,7 +89,7 @@ until REAL_USER=$(find_human_user) && [ -n "$REAL_USER" ]; do
 done
 
 REAL_HOME=$(getent passwd "$REAL_USER" | cut -d: -f6)
-WATCH_DIR="$REAL_HOME/.cache/noctalia"
+WATCH_DIR="$REAL_HOME/.config/noctalia"
 COLORS_JSON="$REAL_HOME/.config/noctalia/colors.json"
 
 # --- Wait for watch dir to exist ---
@@ -105,10 +105,10 @@ apply_accent "$COLORS_JSON"
 
 # --- Watch for changes, restart inotifywait if it dies ---
 while true; do
-    inotifywait -m -e close_write --format '%f' "$WATCH_DIR" 2>/dev/null | \
+    inotifywait -m -e close_write -e moved_to --format '%f' "$WATCH_DIR" 2>/dev/null | \
     while read -r changed; do
         case "$changed" in
-            theming.dynamic.toml|theming.predefined.toml|predefined-scheme.json)
+            colors.json)
                 log "'$changed' changed, queuing..."
                 touch "$PENDING"
                 apply_worker &
