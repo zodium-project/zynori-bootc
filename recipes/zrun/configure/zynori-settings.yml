@@ -47,7 +47,6 @@ modules:
        sed -i 's/property bool enableClipboardHistory: false/property bool enableClipboardHistory: true/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
        sed -i '/"action": "hibernate"/{n; s/"enabled": true/"enabled": false/}' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
        sed -i '/"action": "rebootToUefi"/{n; s/"enabled": true/"enabled": false/}' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
-       sed -i 's/property string predefinedScheme: "Noctalia (default)"/property string predefinedScheme: "Ayu"/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
        sed -i 's/property list<var> activeTemplates: \[\]/property list<var> activeTemplates: [{"id": "gtk", "enabled": true}, {"id": "kcolorscheme", "enabled": true}, {"id": "qt", "enabled": true}]/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
        sed -i '/property JsonObject idle: JsonObject {/{n; s/property bool enabled: false/property bool enabled: true/}' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
        sed -i 's/property bool enableLockScreenMediaControls: false/property bool enableLockScreenMediaControls: true/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
