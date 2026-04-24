@@ -12,7 +12,6 @@ modules:
           - glycin-gtk4-libs
           - ffmpegthumbnailer
           - seahorse
-          - bazaar
           - file-roller
           - ghostty
           - helium-drm
