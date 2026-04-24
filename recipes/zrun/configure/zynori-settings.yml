@@ -20,6 +20,9 @@ modules:
        chmod 755 /usr/libexec/papirus-color-sync
        chmod 755 /usr/libexec/papirus-sync-systemd
        systemctl enable papirus-accent.service
+       chmod go+rx /etc/xdg
+       chmod go+rx /etc/xdg/weston
+       chmod go+r /etc/xdg/weston/weston.ini
 
  - type: script
    snippets:
