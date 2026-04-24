@@ -39,7 +39,7 @@ layout {
         proportion 0.66666
         proportion 0.99999
     }
-    preset-window-height {
+    preset-window-heights {
         proportion 0.33333
         proportion 0.50000
         proportion 0.66666
