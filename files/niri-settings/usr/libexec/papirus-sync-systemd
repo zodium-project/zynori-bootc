@@ -40,6 +40,8 @@ apply_accent() {
     rsync -a --delete /etc/zodium/icons/Papirus-Dark/ \
         "$REAL_HOME/.local/share/icons/Papirus-Dark/" \
         || err "rsync icons failed"
+    chown -R "$REAL_USER:$REAL_USER" "$REAL_HOME/.local/share/icons/Papirus-Dark/" \
+        || err "chown icons failed"
 
     # Guard — colors.json may not exist yet
     if [ ! -f "$colors_json" ]; then
