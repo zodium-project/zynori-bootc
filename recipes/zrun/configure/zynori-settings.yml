@@ -54,3 +54,5 @@ modules:
        sed -i 's/property int shadowOffsetX: 2/property int shadowOffsetX: 0/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
        sed -i 's/property int shadowOffsetY: 3/property int shadowOffsetY: 0/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
        sed -i 's/property list<string> transitionType: \["fade", "disc", "stripes", "wipe", "pixelate", "honeycomb"\]/property list<string> transitionType: ["fade"]/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
+       sed -i 's/property string fontDefault: ""/property string fontDefault: "Cantarell"/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
+       sed -i 's/property string fontFixed: ""/property string fontFixed: "Hack Nerd Font Mono"/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
