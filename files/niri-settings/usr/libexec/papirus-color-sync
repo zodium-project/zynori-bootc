@@ -48,6 +48,7 @@ read_sync_file() {
 }
 
 write_sync_file() {
+    mkdir -p "$(dirname "$SYNC_FILE")"
     cat > "$SYNC_FILE" <<-EOF
 	shadow=$COLOR_SHADOW
 	accent-dark=$COLOR_ACCENT_DARK
