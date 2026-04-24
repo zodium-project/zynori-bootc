@@ -12,7 +12,7 @@ COLOR_NAME="noctalia-dynamic"
 BASE_COLOR="blue"
 SIZES=(22x22 24x24 32x32 48x48 64x64)
 PREFIXES=("folder" "user")
-SYNC_FILE="$THEME_DIR/.papirus-sync"
+SYNC_FILE="${SYNC_FILE:-/var/cache/papirus-accent/sync}"
 # ============================================================
 
 msg()   { printf "papirus-color-sync: %s\n" "$*"; }

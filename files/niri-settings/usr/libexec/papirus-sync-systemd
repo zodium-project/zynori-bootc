@@ -65,6 +65,7 @@ print(d['mPrimary'].lstrip('#'))
         || err "chown icons failed"
 
     if ! THEME_DIR="$REAL_HOME/.local/share/icons/Papirus-Dark" \
+        SYNC_FILE="$REAL_HOME/.cache/papirus-accent/sync" \
         /usr/libexec/papirus-color-sync \
         --shadow      "$shadow" \
         --accent-dark "$accent_dark" \
