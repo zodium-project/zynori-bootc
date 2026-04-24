@@ -57,20 +57,21 @@ print(d['mPrimary'].lstrip('#'))
 
     log "applying accent=$accent shadow=$shadow accent_dark=$accent_dark"
 
-    if ! /usr/libexec/papirus-color-sync \
+    # Sync clean upstream icons into user home before recoloring
+    rsync -a --delete /usr/share/icons/Papirus-Dark/ \
+        "$REAL_HOME/.local/share/icons/Papirus-Dark/" \
+        || err "rsync icons failed"
+    chown -R "$REAL_USER:$REAL_USER" "$REAL_HOME/.local/share/icons/Papirus-Dark/" \
+        || err "chown icons failed"
+
+    if ! THEME_DIR="$REAL_HOME/.local/share/icons/Papirus-Dark" \
+        /usr/libexec/papirus-color-sync \
         --shadow      "$shadow" \
         --accent-dark "$accent_dark" \
         --accent      "$accent"; then
         err "papirus-color-sync failed, will retry on next theme change"
         return 0
     fi
-
-    # Sync recolored icons into user home so Flatpak can see them
-    rsync -a --delete /etc/zodium/icons/Papirus-Dark/ \
-        "$REAL_HOME/.local/share/icons/Papirus-Dark/" \
-        || err "rsync icons failed"
-    chown -R "$REAL_USER:$REAL_USER" "$REAL_HOME/.local/share/icons/Papirus-Dark/" \
-        || err "chown icons failed"
 }
 
 apply_worker() {

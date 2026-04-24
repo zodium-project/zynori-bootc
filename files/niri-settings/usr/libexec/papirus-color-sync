@@ -5,9 +5,9 @@ set -euo pipefail
 
 # adjust these if paths/names change in the future
 # ============================================================
-ICONS_BASE="/etc/zodium/icons"
+ICONS_BASE="${ICONS_BASE:-/usr/share/icons}"
 THEME_NAME="Papirus-Dark"
-THEME_DIR="$ICONS_BASE/$THEME_NAME"
+THEME_DIR="${THEME_DIR:-$ICONS_BASE/$THEME_NAME}"
 COLOR_NAME="noctalia-dynamic"
 BASE_COLOR="blue"
 SIZES=(22x22 24x24 32x32 48x48 64x64)
