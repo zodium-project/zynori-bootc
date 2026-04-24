@@ -89,6 +89,15 @@ until REAL_USER=$(find_human_user) && [ -n "$REAL_USER" ]; do
 done
 
 REAL_HOME=$(getent passwd "$REAL_USER" | cut -d: -f6)
+
+# --- Bind mount icons for flatpak ---
+ICONS_MOUNT="$REAL_HOME/.local/share/icons/Papirus-Dark"
+if ! mountpoint -q "$ICONS_MOUNT"; then
+    mkdir -p "$ICONS_MOUNT"
+    mount --bind /etc/zodium/icons/Papirus-Dark "$ICONS_MOUNT"
+    log "bind mounted icons to '$ICONS_MOUNT'"
+fi
+
 WATCH_DIR="$REAL_HOME/.config/noctalia"
 COLORS_JSON="$REAL_HOME/.config/noctalia/colors.json"
 
