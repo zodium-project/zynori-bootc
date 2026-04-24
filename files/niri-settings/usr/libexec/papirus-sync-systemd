@@ -36,6 +36,11 @@ darken() {
 apply_accent() {
     local colors_json="$1"
 
+    # Sync icons into user home so Flatpak can see them
+    rsync -a --delete /etc/zodium/icons/Papirus-Dark/ \
+        "$REAL_HOME/.local/share/icons/Papirus-Dark/" \
+        || err "rsync icons failed"
+
     # Guard — colors.json may not exist yet
     if [ ! -f "$colors_json" ]; then
         err "colors.json missing at '$colors_json', skipping"
@@ -89,14 +94,6 @@ until REAL_USER=$(find_human_user) && [ -n "$REAL_USER" ]; do
 done
 
 REAL_HOME=$(getent passwd "$REAL_USER" | cut -d: -f6)
-
-# --- Bind mount icons for flatpak ---
-ICONS_MOUNT="$REAL_HOME/.local/share/icons/Papirus-Dark"
-if ! mountpoint -q "$ICONS_MOUNT"; then
-    mkdir -p "$ICONS_MOUNT"
-    mount --bind /etc/zodium/icons/Papirus-Dark "$ICONS_MOUNT"
-    log "bind mounted icons to '$ICONS_MOUNT'"
-fi
 
 WATCH_DIR="$REAL_HOME/.config/noctalia"
 COLORS_JSON="$REAL_HOME/.config/noctalia/colors.json"
