@@ -57,12 +57,19 @@ print(d['mPrimary'].lstrip('#'))
 
     log "applying accent=$accent shadow=$shadow accent_dark=$accent_dark"
 
+    # Sync shared base assets (Papirus) — no recoloring needed
+    rsync -a --delete /usr/share/icons/Papirus/ \
+        "$REAL_HOME/.local/share/icons/Papirus/" \
+        || err "rsync Papirus (base) failed"
+    chown -R "$REAL_USER:$REAL_USER" "$REAL_HOME/.local/share/icons/Papirus/" \
+        || err "chown Papirus (base) failed"
+
     # Sync clean upstream icons into user home before recoloring
     rsync -a --delete /usr/share/icons/Papirus-Dark/ \
         "$REAL_HOME/.local/share/icons/Papirus-Dark/" \
-        || err "rsync icons failed"
+        || err "rsync Papirus-Dark failed"
     chown -R "$REAL_USER:$REAL_USER" "$REAL_HOME/.local/share/icons/Papirus-Dark/" \
-        || err "chown icons failed"
+        || err "chown Papirus-Dark failed"
 
     if ! THEME_DIR="$REAL_HOME/.local/share/icons/Papirus-Dark" \
         SYNC_FILE="$REAL_HOME/.cache/papirus-accent/sync" \
