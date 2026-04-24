@@ -27,15 +27,21 @@ layout {
 
     shadow {
         on
-        softness 9
-        spread 3
+        softness 8
+        spread 4
         offset x=0 y=0
         draw-behind-window false
         color "#00000070"
     }
     preset-column-widths {
         proportion 0.33333
-        proportion 0.5
+        proportion 0.50000
+        proportion 0.66666
+        proportion 0.99999
+    }
+    preset-window-height {
+        proportion 0.33333
+        proportion 0.50000
         proportion 0.66666
         proportion 0.99999
     }
