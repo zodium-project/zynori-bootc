@@ -26,3 +26,5 @@ modules:
             mv /usr/share/icons/Papirus-Dark/* /etc/zodium/icons/Papirus-Dark/
             rm -rf /usr/share/icons/Papirus-Dark
             rm -rf /usr/share/icons/Papirus
+            ln -s /etc/zodium/icons/Papirus /usr/share/icons/
+            ln -s /etc/zodium/icons/Papirus-Dark /usr/share/icons/
