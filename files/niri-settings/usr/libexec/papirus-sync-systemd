@@ -36,13 +36,6 @@ darken() {
 apply_accent() {
     local colors_json="$1"
 
-    # Sync icons into user home so Flatpak can see them
-    rsync -a --delete /etc/zodium/icons/Papirus-Dark/ \
-        "$REAL_HOME/.local/share/icons/Papirus-Dark/" \
-        || err "rsync icons failed"
-    chown -R "$REAL_USER:$REAL_USER" "$REAL_HOME/.local/share/icons/Papirus-Dark/" \
-        || err "chown icons failed"
-
     # Guard — colors.json may not exist yet
     if [ ! -f "$colors_json" ]; then
         err "colors.json missing at '$colors_json', skipping"
@@ -69,7 +62,15 @@ print(d['mPrimary'].lstrip('#'))
         --accent-dark "$accent_dark" \
         --accent      "$accent"; then
         err "papirus-color-sync failed, will retry on next theme change"
+        return 0
     fi
+
+    # Sync recolored icons into user home so Flatpak can see them
+    rsync -a --delete /etc/zodium/icons/Papirus-Dark/ \
+        "$REAL_HOME/.local/share/icons/Papirus-Dark/" \
+        || err "rsync icons failed"
+    chown -R "$REAL_USER:$REAL_USER" "$REAL_HOME/.local/share/icons/Papirus-Dark/" \
+        || err "chown icons failed"
 }
 
 apply_worker() {
