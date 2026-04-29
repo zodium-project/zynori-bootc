@@ -9,9 +9,10 @@ modules:
           - cliphist
           - wtype
           - fastfetch
-          - noctalia-qs
-          - noctalia-shell
+          - noctalia-shell-v5
           - nwg-look
+          - qt5ct
+          - qt6ct
           - ddcutil
           - evolution-data-server
           - breeze-cursor-theme

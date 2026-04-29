@@ -15,4 +15,4 @@ if (( NOW - LAST < 300 )); then
 fi
 
 echo "$NOW" > "$LOCK"
-qs -c noctalia-shell ipc call sessionMenu toggle
+noctalia msg panel-toggle session

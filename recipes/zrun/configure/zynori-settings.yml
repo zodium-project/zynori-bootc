@@ -23,38 +23,3 @@ modules:
        chmod go+rx /etc/xdg
        chmod go+rx /etc/xdg/weston
        chmod go+r /etc/xdg/weston/weston.ini
-
- - type: script
-   snippets:
-     - |
-       sed -i 's|property string defaultWallpapersDirectory: Quickshell.env("HOME") + "/Pictures/Wallpapers"|property string defaultWallpapersDirectory: "/usr/share/wallpapers"|' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
-       sed -i 's/property string barType: "simple"/property string barType: "framed"/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
-       sed -i 's/property string position: "top" \/\/ "top", "bottom", "left", or "right"/property string position: "left" \/\/ "top", "bottom", "left", or "right"/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
-       sed -i 's/property bool showCapsule: true/property bool showCapsule: false/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
-       sed -i 's/property real backgroundOpacity: 0.93/property real backgroundOpacity: 1.0/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
-       sed -i 's/property real dimmerOpacity: 0.2/property real dimmerOpacity: 0.3/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
-       sed -i 's/property bool lockScreenAnimations: false/property bool lockScreenAnimations: true/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
-       sed -i 's/property bool enableBlurBehind: true/property bool enableBlurBehind: false/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
-       sed -i 's/property string shadowDirection: "bottom_right"/property string shadowDirection: "center"/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
-       sed -i 's/property bool showChangelogOnStartup: true/property bool showChangelogOnStartup: false/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
-       sed -i 's/adapter.ui.fontDefault = Qt.application.font.family/adapter.ui.fontDefault = "Cantarell"/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
-       sed -i 's/adapter.ui.fontFixed = "monospace"/adapter.ui.fontFixed = "Hack Nerd Font Mono"/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
-       sed -i 's/property bool scrollbarAlwaysVisible: true/property bool scrollbarAlwaysVisible: false/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
-       sed -i 's/property real panelBackgroundOpacity: 0.93/property real panelBackgroundOpacity: 1.0/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
-       sed -i 's/property bool autoLocate: false/property bool autoLocate: true/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
-       sed -i 's/property bool overviewEnabled: false/property bool overviewEnabled: true/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
-       sed -i 's/property string terminalCommand: "alacritty -e"/property string terminalCommand: "ghostty -e"/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
-       sed -i 's/property bool disableWallpaper: true/property bool disableWallpaper: false/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
-       sed -i '/\/\/ dock/{n; n; s/property bool enabled: true/property bool enabled: false/}' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
-       sed -i 's/property string position: "center"  \/\/ Position: center, top_left, top_right, bottom_left, bottom_right, bottom_center, top_center/property string position: "bottom_center"  \/\/ Position: center, top_left, top_right, bottom_left, bottom_right, bottom_center, top_center/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
-       sed -i 's/property bool enableClipboardHistory: false/property bool enableClipboardHistory: true/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
-       sed -i '/"action": "hibernate"/{n; s/"enabled": true/"enabled": false/}' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
-       sed -i '/"action": "rebootToUefi"/{n; s/"enabled": true/"enabled": false/}' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
-       sed -i 's/property list<var> activeTemplates: \[\]/property list<var> activeTemplates: [{"id": "gtk", "enabled": true}, {"id": "kcolorscheme", "enabled": true}, {"id": "qt", "enabled": true}]/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
-       sed -i '/property JsonObject idle: JsonObject {/{n; s/property bool enabled: false/property bool enabled: true/}' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
-       sed -i 's/property bool enableLockScreenMediaControls: false/property bool enableLockScreenMediaControls: true/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
-       sed -i 's/property int shadowOffsetX: 2/property int shadowOffsetX: 0/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
-       sed -i 's/property int shadowOffsetY: 3/property int shadowOffsetY: 0/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
-       sed -i 's/property list<string> transitionType: \["fade", "disc", "stripes", "wipe", "pixelate", "honeycomb"\]/property list<string> transitionType: ["fade"]/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
-       sed -i 's/property string fontDefault: ""/property string fontDefault: "Cantarell"/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
-       sed -i 's/property string fontFixed: ""/property string fontFixed: "Hack Nerd Font Mono"/' /etc/xdg/quickshell/noctalia-shell/Commons/Settings.qml
