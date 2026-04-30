@@ -8,7 +8,7 @@
 name: zynori-bootc
 description: Zynori Linux image for Mesa GPUS
 base-image: ghcr.io/zodium-project/zcore-bootc
-image-version: latest
+image-version: 44
 blue-build-tag: none
 cosign-version: none
 nushell-version: none
