@@ -8,7 +8,7 @@
 name: zynori-nvidia
 description: Zynori Linux image for NVIDIA GPUS.
 base-image: ghcr.io/zodium-project/zcore-nvidia
-image-version: 43
+image-version: latest
 blue-build-tag: none
 cosign-version: none
 nushell-version: none
