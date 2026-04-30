@@ -9,7 +9,7 @@ modules:
           - cliphist
           - wtype
           - fastfetch
-          - noctalia
+          - noctalia-shell-v5
           - nwg-look
           - qt5ct
           - qt6ct
