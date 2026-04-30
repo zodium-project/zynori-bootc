@@ -6,8 +6,14 @@ prefer-no-csd
 
 cursor {
     xcursor-theme "breeze_cursors"
- // xcursor-size 24
     hide-when-typing
+}
+
+blur {
+  passes     2 // more passes = stronger blur (default: 3)
+  offset     4 // sample distance per pass (default: 3.0)
+  noise      0 // grain overlay (default: 0.02)
+  saturation 1 // color saturation boost (default: 1.5)
 }
 
 layout {
